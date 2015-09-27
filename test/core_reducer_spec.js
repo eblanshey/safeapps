@@ -10,8 +10,8 @@ describe('reducers', () => {
 
     it('sets authData on login given an object, emulating a login', () => {
       const state = fromJS({
-        loggingIn: true,
-        loggedIn: false,
+        isLoggingIn: true,
+        isLoggedIn: false,
         authData: null
       });
       const nextState = setAuthData(state, {
@@ -19,40 +19,57 @@ describe('reducers', () => {
       });
 
       expect(nextState).to.equal(Map({
-        loggingIn: false,
-        loggedIn: true,
+        isLoggingIn: false,
+        isLoggedIn: true,
         authData: Map({
           key: 'value'
         })
       }));
     });
 
+    it('sets a NULL authData, emulating a logout', () => {
+      const state = fromJS({
+        isLoggingIn: false,
+        isLoggedIn: true,
+        authData: {key: 'value'},
+        isAdmin: true
+      });
+      const nextState = setAuthData(state, null);
+
+      expect(nextState).to.equal(Map({
+        isLoggingIn: false,
+        isLoggedIn: false,
+        authData: null,
+        isAdmin: false
+      }));
+    });
+
     it('sets logging in to true', () => {
       const state = fromJS({
-        loggingIn: false,
-        loggedIn: false,
+        isLoggingIn: false,
+        isLoggedIn: false,
         authData: null
       });
       const nextState = loggingIn(state);
 
       expect(nextState).to.equal(Map({
-        loggingIn: true,
-        loggedIn: false,
+        isLoggingIn: true,
+        isLoggedIn: false,
         authData: null
       }));
     });
 
     it('sets logging in to false', () => {
       const state = fromJS({
-        loggingIn: true,
-        loggedIn: false,
+        isLoggingIn: true,
+        isLoggedIn: false,
         authData: null
       });
       const nextState = loginFailure(state);
 
       expect(nextState).to.equal(Map({
-        loggingIn: false,
-        loggedIn: false,
+        isLoggingIn: false,
+        isLoggedIn: false,
         authData: null
       }));
     });

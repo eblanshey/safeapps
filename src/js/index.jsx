@@ -3,19 +3,31 @@ import Router, {Route, DefaultRoute} from 'react-router';
 import {createStore, applyMiddleware} from 'redux';
 import reducer from './reducers';
 import thunk from 'redux-thunk';
+import loggerMiddleware from './middleware/logger';
 import {Provider} from 'react-redux';
 
 import App from './views/App';
 import {LoginContainer} from './views/Login';
+import {setupLoginListener} from './firebaseRepository';
+import {loginSuccessful} from 'actions';
 
+console.log(Firebase);
+
+// Prepare store
 const createStoreWithMiddleware = applyMiddleware(
+  loggerMiddleware,
   thunk
 )(createStore);
-
 const store = createStoreWithMiddleware(reducer);
 
+// Set up Firebase to dispatch authData on login (needed for auto-login when page reloaded)
+setupLoginListener(authData => {
+  console.log('got authdata', authData);
+  store.dispatch(loginSuccessful(authData));
+});
+
 const routes = (
-  <Route component={App}>
+  <Route path="/" component={App}>
     <Route path="/login" component={LoginContainer} />
   </Route>
 );

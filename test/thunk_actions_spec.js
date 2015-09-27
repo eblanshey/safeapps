@@ -14,20 +14,14 @@ describe('thunk actions', () => {
   }
 
   describe('login', () => {
-    //afterEach(() => {
-    //  Firebase.loginWithEmail.restore();
-    //  actions.loginSuccessful.restore();
-    //});
 
-    it('should call the loginSuccessful action when firebase returns authData', (done) => {
+    it('should return true when firebase returns authData', (done) => {
 
       const returnValue = {testKey: 'testValue'};
       sinon
         .stub(Firebase, 'loginWithEmail')
         .resolves(returnValue);
 
-      const loginSuccessful = sinon
-        .spy(actions, 'loginSuccessful');
       const login = sinon
         .spy(actions, 'login');
 
@@ -44,9 +38,8 @@ describe('thunk actions', () => {
       thunks
         .submitEmailLogin('email', 'password')(dispatch, getState)
         .then(result => {
-          expect(loginSuccessful.withArgs(returnValue).calledOnce).to.be.true;
           expect(login.withArgs().calledOnce).to.be.true;
-          restore(Firebase.loginWithEmail, login, loginSuccessful);
+          restore(Firebase.loginWithEmail, login);
           done();
         });
     });
@@ -85,21 +78,6 @@ describe('thunk actions', () => {
         });
     });
 
-    it('should not attempt to log in if authdata is already set', () => {
-      const authData = {
-        auth: {
-          authData: {}
-        }
-      };
-
-      function getState() {
-        return fromJS(authData);
-      }
-
-      const result = thunks.submitEmailLogin('email', 'password')(dispatch, getState);
-      expect(result).to.be.null;
-    });
-
 
   });
 
@@ -109,6 +87,11 @@ describe('thunk actions', () => {
       sinon
         .stub(Firebase, 'signupWithEmail')
         .resolves({testKey: 'testValue'}); // whatever it returns won't actually be used by our app
+
+      const returnValue = {testKey: 'testValue'};
+      sinon
+        .stub(Firebase, 'loginWithEmail')
+        .resolves(returnValue);
 
       const signupRequest = sinon
         .spy(actions, 'signupRequest');
@@ -147,11 +130,12 @@ describe('thunk actions', () => {
       thunks
         .signup('test@email.com', 'asdf')(dispatch)
         .then(() => {
+          expect(Firebase.loginWithEmail.calledOnce).to.be.true;
           expect(addGlobalMessage.withArgs('error', sinon.match.any).calledOnce).to.be.true;
           expect(signupRequest.withArgs().calledOnce).to.be.true;
           expect(signupFailure.withArgs().calledOnce).to.be.true;
 
-          restore(Firebase.signupWithEmail, signupRequest, addGlobalMessage, signupFailure);
+          restore(Firebase.signupWithEmail, Firebase.loginWithEmail, signupRequest, addGlobalMessage, signupFailure);
 
           done();
         });

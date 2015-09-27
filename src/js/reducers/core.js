@@ -30,18 +30,25 @@ export function removeGlobalMessage(messages, type, text) {
 
 // Login
 export function setAuthData(authState, newAuthData) {
-  return authState
-    .set('loggedIn', true)
-    .set('loggingIn', false)
-    .set('authData', Map(newAuthData));
+  const newState = authState
+    .set('isLoggedIn', newAuthData ? true : false)
+    .set('isLoggingIn', false)
+    .set('authData', newAuthData ? Map(newAuthData) : null);
+
+  // If logged out, then definitely user should not be set as admin
+  if(!newAuthData) {
+    return newState.set('isAdmin', false);
+  } else {
+    return newState;
+  }
 }
 export function loggingIn(authState) {
   return authState
-    .set('loggingIn', true);
+    .set('isLoggingIn', true);
 }
 export function loginFailure(authState) {
   return authState
-    .set('loggingIn', false);
+    .set('isLoggingIn', false);
 }
 
 // Signup handlers

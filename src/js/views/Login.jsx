@@ -8,6 +8,14 @@ import {addGlobalMessage} from '../actions';
 export const Login = React.createClass({
   mixins: [React.addons.PureRenderMixin],
 
+  componentWillMount: function() {
+    transitionIfNeeded.call(this, this.props);
+  },
+
+  componentWillReceiveProps: function(nextProps) {
+    transitionIfNeeded.call(this, nextProps);
+  },
+
   logIn(e) {
     const email = React.findDOMNode(this.refs.email).value;
     const password = React.findDOMNode(this.refs.password).value;
@@ -49,7 +57,8 @@ export const Login = React.createClass({
 function mapStateToProps(state) {
   return {
     isSigningUp: state.getIn(['signup', 'isSigningUp']),
-    isLoggingIn: state.getIn(['auth', 'isLoggingIn'])
+    isLoggingIn: state.getIn(['auth', 'isLoggingIn']),
+    isLoggedIn: state.getIn(['auth', 'isLoggedIn'])
   };
 }
 
@@ -62,3 +71,9 @@ function mapActionsToProps(dispatch) {
 }
 
 export const LoginContainer = connect(mapStateToProps, mapActionsToProps)(Login);
+
+function transitionIfNeeded(props) {
+  if(props.isLoggedIn) {
+    props.history.pushState(null, '/');
+  }
+}
