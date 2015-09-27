@@ -1,0 +1,13 @@
+// Global messages
+export const ADD_GLOBAL_MESSAGE = 'ADD_GLOBAL_MESSAGE';
+export const REMOVE_GLOBAL_MESSAGE = 'REMOVE_GLOBAL_MESSAGE';
+
+// Login
+export const LOGIN_SUCCESSFUL = 'LOGIN_SUCCESSFUL';
+export const LOGIN_FAILURE = 'LOGIN_FAILURE';
+export const LOGIN = 'LOGIN';
+
+// Signup
+export const SIGNUP_REQUEST = 'SIGNUP_REQUEST';
+export const SIGNUP_COMPLETED = 'SIGNUP_COMPLETED';
+export const SIGNUP_FAILURE = 'SIGNUP_FAILURE';
