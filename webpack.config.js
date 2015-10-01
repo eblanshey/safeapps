@@ -10,8 +10,8 @@ module.exports = {
     loaders: [{
       test: /\.jsx?$/,
       exclude: /node_modules/,
-      loader: 'react-hot!babel'
-    }],
+      loader: 'react-hot!babel?plugins=babel-plugin-object-assign'
+    }]
   },
   resolve: {
     modulesDirectories: ["src/js/", "web_modules", "node_modules"],

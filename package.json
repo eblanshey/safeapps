@@ -13,6 +13,7 @@
   "author": "Ephi Blanshey",
   "license": "ISC",
   "dependencies": {
+    "babel-plugin-object-assign": "^1.2.1",
     "firebase": "^2.2.9",
     "fireproof": "^3.0.3",
     "immutable": "^3.7.5",

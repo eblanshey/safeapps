@@ -1,4 +1,5 @@
 import * as actionTypes from './actionTypes';
+import {CALL_API} from '../middleware/api';
 
 // Global messages
 export function addGlobalMessage(messageType, text) {
@@ -49,4 +50,14 @@ export function signupFailure() {
   return {
     type: actionTypes.SIGNUP_FAILURE
   }
+}
+
+function fetchActiveAppCollection() {
+  return {
+      collection: 'approvedApps',
+      [CALL_API]: {
+        types: [actionTypes.APPROVED_APPS_REQUEST, actionTypes.APPROVED_APPS_SUCCESS, actionTypes.APPROVED_APPS_FAILURE],
+        endpoint: 'users/adminid/approvedApps'
+    }
+  };
 }

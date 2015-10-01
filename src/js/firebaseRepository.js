@@ -27,3 +27,9 @@ export function signupWithEmail(email, password) {
       return data;
     });
 }
+export function getOnce(endpoint) {
+  return fp
+    .child(endpoint)
+    .once('value')
+    .then(snapshot => snapshot.val());
+}

@@ -60,7 +60,7 @@ let store = {
       isLoading: false,
       didInvalidate: false,
       data: pendingApps.json
-    },
+    }
   },
   auth: {
     isLoggedIn: false,
