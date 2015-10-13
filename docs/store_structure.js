@@ -12,21 +12,18 @@ let store = {
     thumbnails: {
       thumbnailid: {
         isLoading: false,
-        didInvalidate: false,
         data: thumbnail_base64
       }
     },
     profiles: {
       myuserid: {
         isLoading: false,
-        didInvalidate: false,
         data: profile.json
       }
     },
     apps: {
       appId: {
         isLoading: false,
-        didInvalidate: false,
         data: app.json
       }
     }
@@ -38,27 +35,22 @@ let store = {
     },
     stages: {
       isLoading: false,
-      didInvalidate: false,
       data: stages.json
     },
     categories: {
       isLoading: false,
-      didInvalidate: false,
       data: categories.json
     },
     approvedApps: {
       isLoading: false,
-      didInvalidate: false,
       data: approvedApps.json
     },
     deniedApps: {
       isLoading: false,
-      didInvalidate: false,
       data: deniedApps.json
     },
     pendingApps: {
       isLoading: false,
-      didInvalidate: false,
       data: pendingApps.json
     }
   },

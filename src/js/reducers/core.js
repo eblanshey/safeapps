@@ -65,3 +65,15 @@ export function signupFailure(signupState) {
     .set('isSigningUp', false)
     .set('didCreateLogin', false);
 }
+
+// API Related Handlers
+export function setCollectionRequest(collectionState) {
+  return collectionState.merge(Map({isLoading: true}));
+}
+export function setCollectionSuccess(collectionState, data) {
+  return collectionState.merge(Map({isLoading: false, data: Map(data)}));
+}
+export function setCollectionFailure(collectionState, error) {
+  // No use of error here yet.
+  return collectionState.merge(Map({isLoading: false}));
+}

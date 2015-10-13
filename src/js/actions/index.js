@@ -52,12 +52,13 @@ export function signupFailure() {
   }
 }
 
-function fetchActiveAppCollection() {
+export function fetchActiveAppCollection() {
   return {
-      collection: 'approvedApps',
       [CALL_API]: {
         types: [actionTypes.APPROVED_APPS_REQUEST, actionTypes.APPROVED_APPS_SUCCESS, actionTypes.APPROVED_APPS_FAILURE],
-        endpoint: 'users/adminid/approvedApps'
-    }
+        endpoint: 'users/adminid/approvedApps',
+        entityOrCollection: 'collection',
+        name: 'approvedApps'
+      }
   };
 }

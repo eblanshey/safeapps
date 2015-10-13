@@ -1,7 +1,8 @@
-import {fromJS} from 'immutable';
+import {Map} from 'immutable';
 
 import DefaultState from './defaultState';
 import * as reducers from './core';
+import {API} from '../middleware/api';
 
 function messages(messagesState, action) {
   switch(action.type) {
@@ -40,9 +41,33 @@ function signup(signupState, action) {
   return signupState;
 }
 
+function collections(collectionState = {}, action) {
+  if (!action[API] || action[API].entityOrCollection != 'collection') {
+    return collectionState;
+  }
+
+  const defaultCollection = Map({
+    isLoading: false,
+    data: null
+  });
+
+
+  switch (action[API].stage) {
+    case 'request':
+      return collectionState.update(action[API].name, defaultCollection, collection => reducers.setCollectionRequest(collection));
+    case 'success':
+      return collectionState.update(action[API].name, defaultCollection, collection => reducers.setCollectionSuccess(collection, action.data));
+    case 'failure':
+      return collectionState.update(action[API].name, defaultCollection, collection => reducers.setCollectionFailure(collection, action.error));
+    default:
+      throw new Error(`Got invalid API stage: ${action[API].stage}`);
+  }
+}
+
 export default function(state = DefaultState, action) {
   // Meh, no magic use of "combineReducers" here
   return state
     .update('messages', messagesState => messages(messagesState, action))
-    .update('auth', authState => auth(authState, action));
+    .update('auth', authState => auth(authState, action))
+    .update('collections', collectionState => collections(collectionState, action));
 }

@@ -4,7 +4,7 @@ import {fromJS, Map, List} from 'immutable';
 import {setAuthData, loggingIn, loginFailure, signupRequest, signUp, signupSuccess, signupFailure,
   addGlobalMessage, removeGlobalMessage} from '../src/js/reducers/core';
 
-describe('reducers', () => {
+describe('coreReducers', () => {
 
   describe('logging in', () => {
 
