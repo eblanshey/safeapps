@@ -1,9 +1,9 @@
 import * as actionTypes from './actionTypes';
 import * as Firebase from '../firebaseRepository';
-import {addGlobalMessage, signupFailure, loginSuccessful, signupCompleted, login, loginFailure, signupRequest} from './index';
+import * as actions from './index';
 
 function doLogin(dispatch, email, password) {
-  dispatch(login());
+  dispatch(actions.login());
 
   return Firebase
     .loginWithEmail(email, password)
@@ -13,8 +13,8 @@ function doLogin(dispatch, email, password) {
       // This listener will know to set login data, even when using this form.
       return true;
     }, error => {
-      dispatch(loginFailure());
-      dispatch(addGlobalMessage('error', error));
+      dispatch(actions.loginFailure());
+      dispatch(actions.addGlobalMessage('error', error));
     });
 }
 
@@ -26,20 +26,44 @@ export function submitEmailLogin(email, password) {
 
 export function signup(email, password) {
   return function(dispatch) {
-    dispatch(signupRequest());
+    dispatch(actions.signupRequest());
 
     return Firebase
       .signupWithEmail(email, password)
       .then(authData => {
         // We won't actually use the authData here. They still need to log in.
-        dispatch(signupCompleted());
+        dispatch(actions.signupCompleted());
         return doLogin(dispatch, email, password)
           .then(() => {
-            dispatch(addGlobalMessage('success', 'You have successfully created an account! Welcome!'))
+            dispatch(actions.addGlobalMessage('success', 'You have successfully created an account! Welcome!'))
           });
       }, error => {
-        dispatch(signupFailure());
-        dispatch(addGlobalMessage('error', error));
+        dispatch(actions.signupFailure());
+        dispatch(actions.addGlobalMessage('error', error));
       });
+  }
+}
+
+export function loadApprovedAppCollection() {
+  return (dispatch, getState) => {
+    const apps = getState().getIn(['collections', 'approvedApps']);
+
+    if (apps && apps.size > 0) {
+      return null;
+    }
+
+    return dispatch(actions.fetchApprovedAppCollection());
+  }
+}
+
+export function loadAppEntity(userid, appid) {
+  return (dispatch, getState) => {
+    const app = getState().getIn(['entities', 'apps', appid]);
+
+    if (app) {
+      return null;
+    }
+
+    return dispatch(actions.fetchAppEntity(userid, appid));
   }
 }

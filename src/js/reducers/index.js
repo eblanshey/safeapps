@@ -41,16 +41,15 @@ function signup(signupState, action) {
   return signupState;
 }
 
-function collections(collectionState = {}, action) {
-  if (!action[API] || action[API].entityOrCollection != 'collection') {
+function collections(collectionState, action) {
+  if (!action[API] || action[API].entityOrCollection !== 'collection') {
     return collectionState;
   }
 
   const defaultCollection = Map({
     isLoading: false,
-    data: null
+    data: Map()
   });
-
 
   switch (action[API].stage) {
     case 'request':
@@ -64,10 +63,33 @@ function collections(collectionState = {}, action) {
   }
 }
 
+function entities(entityState, action) {
+  if (!action[API] || action[API].entityOrCollection !== 'entity') {
+    return entityState;
+  }
+
+  const defaultEntity = Map({
+    isLoading: false,
+    data: null
+  });
+
+  switch (action[API].stage) {
+    case 'request':
+      return entityState.updateIn([action[API].name, action[API].id], defaultEntity, entity => reducers.setEntityRequest(entity));
+    case 'success':
+      return entityState.updateIn([action[API].name, action[API].id], defaultEntity, entity => reducers.setEntitySuccess(entity, action.data));
+    case 'failure':
+      return entityState.updateIn([action[API].name, action[API].id], defaultEntity, entity => reducers.setEntityFailure(entity, action.error));
+    default:
+      throw new Error(`Got invalid API stage: ${action[API].stage}`);
+  }
+}
+
 export default function(state = DefaultState, action) {
   // Meh, no magic use of "combineReducers" here
   return state
     .update('messages', messagesState => messages(messagesState, action))
     .update('auth', authState => auth(authState, action))
-    .update('collections', collectionState => collections(collectionState, action));
+    .update('collections', collectionState => collections(collectionState, action))
+    .update('entities', entityState => entities(entityState, action));
 }

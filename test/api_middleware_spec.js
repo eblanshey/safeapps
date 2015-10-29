@@ -6,7 +6,7 @@ import {createStore, applyMiddleware} from 'redux';
 import {expect} from 'chai';
 
 import apiMiddleware from '../src/js/middleware/api';
-import {fetchActiveAppCollection} from '../src/js/actions';
+import {fetchApprovedAppCollection, fetchAppEntity} from '../src/js/actions';
 import reducer from '../src/js/reducers';
 import * as coreReducers from '../src/js/reducers/core';
 
@@ -20,7 +20,7 @@ describe('api middleware', () => {
     return createStoreWithMiddleware(reducer, initialState);
   }
 
-  it('successfully calls the endpoint to fetch the active app collection', (done) => {
+  it('tests fetching collections from the api by fetching the active app collection', (done) => {
     const store = initializeStore(fromJS({collections: {}}));
 
     const returnValue = {testKey: 'testValue'};
@@ -34,7 +34,7 @@ describe('api middleware', () => {
       .spy(coreReducers, 'setCollectionSuccess');
 
     try {
-      const result = store.dispatch(fetchActiveAppCollection());
+      const result = store.dispatch(fetchApprovedAppCollection());
       result.then((data) => {
           const shouldBe = fromJS({
             isLoading: false,
@@ -45,9 +45,53 @@ describe('api middleware', () => {
           expect(store.getState().getIn(['collections', 'approvedApps'])).to.equal(shouldBe);
           expect(setCollectionRequest.withArgs(Map({
             isLoading: false,
-            data: null
+            data: Map()
           })).calledOnce).to.be.true;
           expect(setCollectionSuccess.calledOnce).to.be.true;
+          restore(Firebase.getOnce);
+          done();
+        },
+        (error) => {
+          done(error);
+        });
+    } catch (x) {
+      done(x);
+    }
+
+  });
+
+  it('tests fetching entities from the api by fetching an app entity', (done) => {
+    const store = initializeStore(fromJS({entities: {}}));
+
+    const returnValue = {testKey: 'testValue'};
+    sinon
+      .stub(Firebase, 'getOnce')
+      .resolves(returnValue);
+
+    const setEntityRequest = sinon
+      .spy(coreReducers, 'setEntityRequest');
+    const setEntitySuccess = sinon
+      .spy(coreReducers, 'setEntitySuccess');
+
+    try {
+      const result = store.dispatch(fetchAppEntity('userid', 'abc'));
+      result.then(() => {
+          const shouldBe = fromJS({
+            apps: {
+              abc: {
+                isLoading: false,
+                data: {
+                  testKey: 'testValue'
+                }
+              }
+            }
+          });
+          expect(store.getState().get('entities')).to.equal(shouldBe);
+          expect(setEntityRequest.withArgs(Map({
+            isLoading: false,
+            data: null
+          })).calledOnce).to.be.true;
+          expect(setEntitySuccess.calledOnce).to.be.true;
           restore(Firebase.getOnce);
           done();
         },

@@ -14,7 +14,7 @@ export default store => next => action => {
     return next(action);
   }
 
-  const { collection, entity, types, endpoint, entityOrCollection, name } = callAPI;
+  const { collection, entity, types, endpoint, entityOrCollection, id, name } = callAPI;
 
   if (typeof endpoint !== 'string') {
     throw new Error('Specify a string endpoint URL.');
@@ -22,8 +22,11 @@ export default store => next => action => {
   if (endpoint.startsWith('http') || endpoint.startsWith('safe:')) {
     throw new Error('Don\'t pass the entire url, just the URI.');
   }
-  if (!entityOrCollection || (entityOrCollection != 'collection' && entityOrCollection != 'entity')) {
+  if (!entityOrCollection || (entityOrCollection !== 'collection' && entityOrCollection !== 'entity')) {
     throw new Error('Specify whether this is a collection or entity request.')
+  }
+  if (entityOrCollection === 'entity' && ! id) {
+    throw new Error('An ID must be provided with entity rerquests.');
   }
   if (!name) {
     throw new Error('Specify the entity/collection name.');
@@ -43,7 +46,8 @@ export default store => next => action => {
     finalAction[API] = {
       stage,
       entityOrCollection: finalAction[CALL_API].entityOrCollection,
-      name: finalAction[CALL_API].name
+      name: finalAction[CALL_API].name,
+      id: finalAction[CALL_API].id
     }
     delete finalAction[CALL_API];
     return finalAction;

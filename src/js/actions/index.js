@@ -52,13 +52,25 @@ export function signupFailure() {
   }
 }
 
-export function fetchActiveAppCollection() {
+export function fetchApprovedAppCollection() {
   return {
       [CALL_API]: {
         types: [actionTypes.APPROVED_APPS_REQUEST, actionTypes.APPROVED_APPS_SUCCESS, actionTypes.APPROVED_APPS_FAILURE],
         endpoint: 'users/adminid/approvedApps',
         entityOrCollection: 'collection',
         name: 'approvedApps'
+      }
+  };
+}
+
+export function fetchAppEntity(userid, appid) {
+  return {
+      [CALL_API]: {
+        types: [actionTypes.APP_REQUEST, actionTypes.APP_SUCCESS, actionTypes.APP_FAILURE],
+        endpoint: `users/${userid}/apps/${appid}`,
+        entityOrCollection: 'entity',
+        id: appid,
+        name: 'apps'
       }
   };
 }

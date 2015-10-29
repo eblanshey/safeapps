@@ -77,3 +77,13 @@ export function setCollectionFailure(collectionState, error) {
   // No use of error here yet.
   return collectionState.merge(Map({isLoading: false}));
 }
+export function setEntityRequest(entityState) {
+  return entityState.merge(Map({isLoading: true}));
+}
+export function setEntitySuccess(entityState, data) {
+  return entityState.merge(Map({isLoading: false, data: Map(data)}));
+}
+export function setEntityFailure(entityState, error) {
+  // No use of error here yet.
+  return entityState.merge(Map({isLoading: false}));
+}

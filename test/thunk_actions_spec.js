@@ -143,4 +143,98 @@ describe('thunk actions', () => {
 
   });
 
+  describe('loading collections', () => {
+
+    it('loads an approved app collection for the first time', () => {
+      function getState() {
+        return fromJS({
+          collections: {
+            approvedApps: {}
+          }
+        });
+      }
+
+      const fetchApprovedAppCollection = sinon
+        .stub(actions, 'fetchApprovedAppCollection');
+
+      thunks
+        .loadApprovedAppCollection()(dispatch, getState);
+
+      expect(fetchApprovedAppCollection.withArgs().calledOnce).to.be.true;
+      restore(fetchApprovedAppCollection);
+    });
+
+    it('does not load an approved app collections that exists', () => {
+      function getState() {
+        return fromJS({
+          collections: {
+            approvedApps: {
+              data: 'fake'
+            }
+          }
+        });
+      }
+
+      const fetchApprovedAppCollection = sinon
+        .stub(actions, 'fetchApprovedAppCollection');
+
+      const result = thunks
+        .loadApprovedAppCollection()(dispatch, getState);
+
+      expect(result).to.be.null;
+      expect(fetchApprovedAppCollection.calledOnce).to.be.false;
+      restore(fetchApprovedAppCollection);
+    });
+
+
+  });
+
+  describe('loading entities', () => {
+
+    it('loads an app entity for the first time', () => {
+      function getState() {
+        return fromJS({
+          entities: {
+            apps: {}
+          }
+        });
+      }
+
+      const fetchAppEntity = sinon
+        .stub(actions, 'fetchAppEntity');
+
+      thunks
+        .loadAppEntity('myuserid', 'myappid')(dispatch, getState);
+
+      expect(fetchAppEntity.withArgs('myuserid', 'myappid').calledOnce).to.be.true;
+      restore(fetchAppEntity);
+    });
+
+    it('does not load an app entity that exists', () => {
+      function getState() {
+        return fromJS({
+          entities: {
+            apps: {
+              myappid: {
+                fakeKey: 'fakeValue'
+              }
+            }
+          }
+        });
+      }
+
+      const fetchAppEntity = sinon
+        .stub(actions, 'fetchAppEntity');
+
+      const result = thunks
+        .loadAppEntity('myuserid', 'myappid')(dispatch, getState);
+
+      expect(result).to.be.null;
+      expect(fetchAppEntity.calledOnce).to.be.false;
+      restore(fetchAppEntity);
+    });
+
+
+  });
+
 });

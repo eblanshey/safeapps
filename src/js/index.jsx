@@ -1,13 +1,14 @@
 import React from 'react';
-import Router, {Route, DefaultRoute} from 'react-router';
+import Router, {Route, IndexRoute} from 'react-router';
 import {createStore, applyMiddleware} from 'redux';
-import reducer from './coreReducers';
+import reducer from './reducers';
 import thunk from 'redux-thunk';
 import loggerMiddleware from './middleware/logger';
 import apiMiddleware from './middleware/api';
 import {Provider} from 'react-redux';
 
 import App from './views/App';
+import {AppListEntryContainer} from './views/AppListEntry';
 import {LoginContainer} from './views/Login';
 import {setupLoginListener} from './firebaseRepository';
 import {loginSuccessful} from 'actions';
@@ -29,6 +30,8 @@ setupLoginListener(authData => {
 const routes = (
   <Route path="/" component={App}>
     <Route path="/login" component={LoginContainer} />
+    <Route path=":status" component={AppListEntryContainer} />
+    <IndexRoute component={AppListEntryContainer} />
   </Route>
 );
 
