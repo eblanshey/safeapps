@@ -1,11 +1,12 @@
 import React from 'react/addons';
 import {Map} from 'immutable';
 
-const AppList = React.createClass({
+import AppListSingle from './AppListSingle';
+
+export default React.createClass({
   mixins: [React.addons.PureRenderMixin],
 
   propTypes: {
-    status: React.PropTypes.string.isRequired,
     appCollection: React.PropTypes.object.isRequired,
     apps: React.PropTypes.object.isRequired,
     loadAppCollection: React.PropTypes.func.isRequired,
@@ -19,13 +20,6 @@ const AppList = React.createClass({
 
   componentWillReceiveProps(nextProps) {
     loadApps.call(this, nextProps);
-
-    // Load each app
-    var appCollectionData = nextProps.appCollection.get('data');
-
-    appCollectionData.forEach((app, id) => {
-      nextProps.loadAppEntity(app.userid, id);
-    });
   },
 
   forceLoadAppCollection() {
@@ -34,30 +28,30 @@ const AppList = React.createClass({
 
   render: function() {
     const { apps, appCollection } = this.props;
+    let content;
 
-    if (appCollection.size === 0 || appCollection.isLoading) {
-      console.log('displayed LOADING');
-      return <h1>Loading apps...</h1>
+    // Show loading message if appCollection is not yet defined or it's loading
+    if (appCollection.size === 0 || appCollection.get('isLoading') === true) {
+      content = (<h1 className="loadingApps">Loading apps...</h1>);
+    } else {
+      content = [];
+
+      appCollection.get('data').forEach((collectionItem, id) => {
+        let app = apps.get(id);
+
+        content.push(<AppListSingle
+          loadAppEntity={this.props.loadAppEntity}
+          userid={collectionItem.get('userid')}
+          id={id}
+          key={id}
+          app={app}
+          />);
+      })
     }
 
-    return (<div>{appCollection.get('data').map((unused, id) => {
-      let app = apps.get(id);
-
-      if (!app) {
-        return <h3>Loading app #{id}</h3>
-      }
-
-      return (
-        <div>
-          <h2>{app.humanName}</h2>
-          <h3>{app.caption}</h3>
-        </div>
-      );
-    })}</div>);
+    return (<div className="AppList">{content}</div>);
   }
 });
-
-export default AppList;
 
 function loadApps(props) {
    return props.loadAppCollection();
