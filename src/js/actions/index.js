@@ -1,5 +1,6 @@
 import * as actionTypes from './actionTypes';
 import {CALL_API} from '../middleware/api';
+import config from '../config';
 
 // Global messages
 export function addGlobalMessage(messageType, text) {
@@ -56,7 +57,7 @@ export function fetchApprovedAppCollection() {
   return {
       [CALL_API]: {
         types: [actionTypes.APPROVED_APPS_REQUEST, actionTypes.APPROVED_APPS_SUCCESS, actionTypes.APPROVED_APPS_FAILURE],
-        endpoint: 'users/adminid/approvedApps',
+        endpoint: `users/${config.adminId}/approvedApps`,
         entityOrCollection: 'collection',
         name: 'approvedApps'
       }

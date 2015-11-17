@@ -1,4 +1,4 @@
-import {Map} from 'immutable';
+import {Map, List} from 'immutable';
 
 import DefaultState from './defaultState';
 import * as reducers from './core';
@@ -48,7 +48,7 @@ function collections(collectionState, action) {
 
   const defaultCollection = Map({
     isLoading: false,
-    data: Map()
+    data: List()
   });
 
   switch (action[API].stage) {

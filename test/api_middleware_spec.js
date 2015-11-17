@@ -1,4 +1,4 @@
-import {fromJS, Map} from 'immutable';
+import {fromJS, Map, List} from 'immutable';
 import sinon from 'sinon';
 import * as Firebase from '../src/js/firebaseRepository';
 import {restore} from './test_utils';
@@ -33,30 +33,27 @@ describe('api middleware', () => {
     const setCollectionSuccess = sinon
       .spy(coreReducers, 'setCollectionSuccess');
 
-    try {
-      const result = store.dispatch(fetchApprovedAppCollection());
-      result.then((data) => {
-          const shouldBe = fromJS({
-            isLoading: false,
-            data: {
-              testKey: 'testValue'
-            }
-          });
-          expect(store.getState().getIn(['collections', 'approvedApps'])).to.equal(shouldBe);
-          expect(setCollectionRequest.withArgs(Map({
-            isLoading: false,
-            data: Map()
-          })).calledOnce).to.be.true;
-          expect(setCollectionSuccess.calledOnce).to.be.true;
-          restore(Firebase.getOnce);
-          done();
-        },
-        (error) => {
-          done(error);
+    const result = store.dispatch(fetchApprovedAppCollection());
+    result.then((data) => {
+        const shouldBe = fromJS({
+          isLoading: false,
+          data: {
+            testKey: 'testValue'
+          }
         });
-    } catch (x) {
-      done(x);
-    }
+        expect(store.getState().getIn(['collections', 'approvedApps'])).to.equal(shouldBe);
+        expect(setCollectionRequest.withArgs(Map({
+          isLoading: false,
+          data: List()
+        })).calledOnce).to.be.true;
+        expect(setCollectionSuccess.calledOnce).to.be.true;
+        restore(Firebase.getOnce);
+        done();
+      },
+      (error) => {
+        done(error);
+      }
+    ).catch(done);
 
   });
 
@@ -73,34 +70,31 @@ describe('api middleware', () => {
     const setEntitySuccess = sinon
       .spy(coreReducers, 'setEntitySuccess');
 
-    try {
-      const result = store.dispatch(fetchAppEntity('userid', 'abc'));
-      result.then(() => {
-          const shouldBe = fromJS({
-            apps: {
-              abc: {
-                isLoading: false,
-                data: {
-                  testKey: 'testValue'
-                }
+    const result = store.dispatch(fetchAppEntity('userid', 'abc'));
+    result.then(() => {
+        const shouldBe = fromJS({
+          apps: {
+            abc: {
+              isLoading: false,
+              data: {
+                testKey: 'testValue'
               }
             }
-          });
-          expect(store.getState().get('entities')).to.equal(shouldBe);
-          expect(setEntityRequest.withArgs(Map({
-            isLoading: false,
-            data: null
-          })).calledOnce).to.be.true;
-          expect(setEntitySuccess.calledOnce).to.be.true;
-          restore(Firebase.getOnce);
-          done();
-        },
-        (error) => {
-          done(error);
+          }
         });
-    } catch (x) {
-      done(x);
-    }
+        expect(store.getState().get('entities')).to.equal(shouldBe);
+        expect(setEntityRequest.withArgs(Map({
+          isLoading: false,
+          data: null
+        })).calledOnce).to.be.true;
+        expect(setEntitySuccess.calledOnce).to.be.true;
+        restore(Firebase.getOnce);
+        done();
+      },
+      (error) => {
+        done(error);
+      }
+    );
 
   });
 

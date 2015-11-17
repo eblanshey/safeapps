@@ -1,11 +1,14 @@
 import React from 'react/addons';
 
 export default React.createClass({
-  mixins: [React.addons.PureRenderMixin],
+  //mixins: [React.addons.PureRenderMixin],
 
   propTypes: {
     userid: React.PropTypes.string.isRequired,
-    id: React.PropTypes.string.isRequired,
+    id: React.PropTypes.oneOfType([
+      React.PropTypes.string,
+      React.PropTypes.number
+      ]).isRequired,
     loadAppEntity: React.PropTypes.func.isRequired,
     app: React.PropTypes.object
   },
@@ -20,14 +23,16 @@ export default React.createClass({
     const {app, id} = this.props;
     let content;
 
-    if (!app) {
+    if (!app || app.size === 0 || app.get('isLoading') === true) {
       content = <h3>Loading app #{id}</h3>;
     } else {
+      const appData = app.get('data');
+
       content = (
         <div>
-          <h2>{app.humanName}</h2>
+          <h2>{appData.get('humanName')}</h2>
 
-          <h3>{app.caption}</h3>
+          <h3>{appData.get('caption')}</h3>
         </div>
       );
     }

@@ -37,16 +37,18 @@ export default React.createClass({
       content = [];
 
       appCollection.get('data').forEach((collectionItem, id) => {
-        let app = apps.get(id);
+        const userid = collectionItem ? collectionItem.get('userid') : null;
 
-        content.push(<AppListSingle
-          loadAppEntity={this.props.loadAppEntity}
-          userid={collectionItem.get('userid')}
-          id={id}
-          key={id}
-          app={app}
-          />);
-      })
+        if (id && userid) {
+          content.push(<AppListSingle
+            loadAppEntity={this.props.loadAppEntity}
+            userid={userid}
+            id={id}
+            key={id}
+            app={apps.get(id)}
+            />);
+        }
+      });
     }
 
     return (<div className="AppList">{content}</div>);

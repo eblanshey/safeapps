@@ -1,4 +1,4 @@
-import {Map} from 'immutable';
+import {Map, fromJS} from 'immutable';
 
 function isValidMessageType(type) {
   return ['error', 'success'].indexOf(type) < 0 ? false : true;
@@ -71,7 +71,7 @@ export function setCollectionRequest(collectionState) {
   return collectionState.merge(Map({isLoading: true}));
 }
 export function setCollectionSuccess(collectionState, data) {
-  return collectionState.merge(Map({isLoading: false, data: Map(data)}));
+  return collectionState.merge(Map({isLoading: false, data: fromJS(data)}));
 }
 export function setCollectionFailure(collectionState, error) {
   // No use of error here yet.
@@ -81,7 +81,7 @@ export function setEntityRequest(entityState) {
   return entityState.merge(Map({isLoading: true}));
 }
 export function setEntitySuccess(entityState, data) {
-  return entityState.merge(Map({isLoading: false, data: Map(data)}));
+  return entityState.merge(Map({isLoading: false, data: fromJS(data)}));
 }
 export function setEntityFailure(entityState, error) {
   // No use of error here yet.

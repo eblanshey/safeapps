@@ -22,7 +22,7 @@ const defaultAppListProps = {
   apps: Map()
 };
 
-describe.only('AppList component', () => {
+describe('AppList component', () => {
 
   it('shows loading message when the app collection is not yet loaded', () => {
     const component = renderIntoDocument(
