@@ -57,7 +57,7 @@ let app = {
   humanName: 'SAFE Talk',
   caption: 'The place to talk about everything SAFE', // max: 100 chars
   categories: [1, 2],
-  thumbnail: `$thumbId`
+  thumbid: `$thumbId`
 }
 // Loaded only when this app is being viewed. Should contain everything else
 let appExtended = {

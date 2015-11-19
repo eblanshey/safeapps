@@ -23,3 +23,7 @@ export const APPROVED_APPS_FAILURE = 'APPROVED_APPS_FAILURE';
 export const APP_REQUEST = 'APP_REQUEST';
 export const APP_SUCCESS = 'APP_SUCCESS';
 export const APP_FAILURE = 'APP_FAILURE';
+// Thumbs
+export const THUMB_REQUEST = 'THUMB_REQUEST';
+export const THUMB_SUCCESS = 'THUMB_SUCCESS';
+export const THUMB_FAILURE = 'THUMB_FAILURE';

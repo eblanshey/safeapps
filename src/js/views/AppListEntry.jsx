@@ -4,7 +4,7 @@ import {Map, List} from 'immutable';
 
 import AppList from '../components/AppList';
 import {loadApprovedAppCollection} from '../actions/thunks';
-import {loadAppEntity} from '../actions/thunks';
+import {loadAppEntity, loadThumbEntity} from '../actions/thunks';
 import {fetchApprovedAppCollection} from '../actions';
 
 export const AppListEntry = React.createClass({
@@ -30,7 +30,8 @@ export const AppListEntry = React.createClass({
 function mapStateToProps(state) {
   return {
     appCollection: state.getIn(['collections', 'approvedApps'], List()),
-    apps: state.getIn(['entities', 'apps'], Map())
+    apps: state.getIn(['entities', 'apps'], Map()),
+    thumbs: state.getIn(['entities', 'thumbs'], Map())
   };
 }
 
@@ -38,7 +39,8 @@ function mapActionsToProps(dispatch) {
   return {
     loadAppCollection: (...args) => dispatch(loadApprovedAppCollection(...args)),
     fetchAppCollection: (...args) => dispatch(fetchApprovedAppCollection(...args)),
-    loadAppEntity: (...args) => dispatch(loadAppEntity(...args))
+    loadAppEntity: (...args) => dispatch(loadAppEntity(...args)),
+    loadThumbEntity: (...args) => dispatch(loadThumbEntity(...args))
   }
 }
 

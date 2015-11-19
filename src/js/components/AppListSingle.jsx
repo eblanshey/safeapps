@@ -1,7 +1,9 @@
 import React from 'react/addons';
 
+import Thumb from './Thumb';
+
 export default React.createClass({
-  //mixins: [React.addons.PureRenderMixin],
+  mixins: [React.addons.PureRenderMixin],
 
   propTypes: {
     userid: React.PropTypes.string.isRequired,
@@ -20,7 +22,7 @@ export default React.createClass({
   },
 
   render: function() {
-    const {app, id} = this.props;
+    const {app, id, thumb, userid} = this.props;
     let content;
 
     if (!app || app.size === 0 || app.get('isLoading') === true) {
@@ -30,6 +32,13 @@ export default React.createClass({
 
       content = (
         <div>
+          <Thumb
+            userid={userid}
+            thumbid={appData.get('thumbid')}
+            thumb={thumb}
+            size={50}
+            loadThumbEntity={this.props.loadThumbEntity}
+            />
           <h2>{appData.get('humanName')}</h2>
 
           <h3>{appData.get('caption')}</h3>

@@ -9,7 +9,7 @@ let store = {
     error: [] // same as successMessages
   },
   entities: {
-    thumbnails: {
+    thumbs: {
       thumbnailid: {
         isLoading: false,
         data: thumbnail_base64

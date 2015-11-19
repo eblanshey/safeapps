@@ -27,7 +27,7 @@ export default React.createClass({
   },
 
   render: function() {
-    const { apps, appCollection } = this.props;
+    const { apps, appCollection, thumbs } = this.props;
     let content;
 
     // Show loading message if appCollection is not yet defined or it's loading
@@ -38,14 +38,19 @@ export default React.createClass({
 
       appCollection.get('data').forEach((collectionItem, id) => {
         const userid = collectionItem ? collectionItem.get('userid') : null;
+        const app = apps.get(id);
+
+        const thumb = app && thumbs ? thumbs.get(app.getIn(['data', 'thumbid'])) : null;
 
         if (id && userid) {
           content.push(<AppListSingle
             loadAppEntity={this.props.loadAppEntity}
+            loadThumbEntity={this.props.loadThumbEntity}
             userid={userid}
             id={id}
             key={id}
             app={apps.get(id)}
+            thumb={thumb}
             />);
         }
       });

@@ -75,3 +75,15 @@ export function fetchAppEntity(userid, appid) {
       }
   };
 }
+
+export function fetchThumbEntity(userid, thumbid) {
+  return {
+      [CALL_API]: {
+        types: [actionTypes.THUMB_REQUEST, actionTypes.THUMB_SUCCESS, actionTypes.THUMB_FAILURE],
+        endpoint: `users/${userid}/thumbs/${thumbid}`,
+        entityOrCollection: 'entity',
+        id: thumbid,
+        name: 'thumbs'
+      }
+  };
+}

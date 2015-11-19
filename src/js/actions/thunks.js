@@ -67,3 +67,14 @@ export function loadAppEntity(userid, appid) {
     return dispatch(actions.fetchAppEntity(userid, appid));
   }
 }
+export function loadThumbEntity(userid, thumbid) {
+  return (dispatch, getState) => {
+    const app = getState().getIn(['entities', 'thumbs', thumbid]);
+
+    if (app) {
+      return null;
+    }
+
+    return dispatch(actions.fetchThumbEntity(userid, thumbid));
+  }
+}
