@@ -28,8 +28,8 @@ describe('GlobalMessages component', () => {
     );
     const success = scryRenderedDOMComponentsWithClass(component, 'successMessage');
     const error = scryRenderedDOMComponentsWithClass(component, 'errorMessage');
-    expect(success[0].getDOMNode().textContent).to.contain('success!');
-    expect(error[0].getDOMNode().textContent).to.contain('error :(');
+    expect(success[0].textContent).to.contain('success!');
+    expect(error[0].textContent).to.contain('error :(');
   });
 
   it('invokes callback when a Close button is clicked', () => {

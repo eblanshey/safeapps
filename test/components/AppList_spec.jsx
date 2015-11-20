@@ -29,7 +29,7 @@ describe('AppList component', () => {
       <AppList {...defaultAppListProps} />
     );
     const message = scryRenderedDOMComponentsWithClass(component, 'loadingApps');
-    expect(message[0].getDOMNode().textContent).to.contain('Loading');
+    expect(message[0].textContent).to.contain('Loading');
   });
 
   it('shows loading message when the app collection is loading', () => {
@@ -37,7 +37,7 @@ describe('AppList component', () => {
       <AppList {...defaultAppListProps} appCollection={Map({isLoading: true})} />
     );
     const message = scryRenderedDOMComponentsWithClass(component, 'loadingApps');
-    expect(message[0].getDOMNode().textContent).to.contain('Loading');
+    expect(message[0].textContent).to.contain('Loading');
   });
 
   it('loads an AppListSingle component when an app is available', () => {

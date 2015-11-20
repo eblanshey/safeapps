@@ -17,7 +17,7 @@ describe('Login view', () => {
 
     expect(textBoxes.length).to.equal(2);
     expect(submit.length).to.equal(2);
-    expect(submit[0].getDOMNode().hasAttribute('disabled')).to.be.false;
+    expect(submit[0].hasAttribute('disabled')).to.be.false;
   });
 
   it('renders email/password text boxes as disabled if isLoggingIn', () => {
@@ -26,8 +26,8 @@ describe('Login view', () => {
     );
     const submit = scryRenderedDOMComponentsWithTag(component, 'button');
 
-    expect(submit[0].getDOMNode().hasAttribute('disabled')).to.be.true;
-    expect(submit[1].getDOMNode().hasAttribute('disabled')).to.be.true;
+    expect(submit[0].hasAttribute('disabled')).to.be.true;
+    expect(submit[1].hasAttribute('disabled')).to.be.true;
   });
 
   it('renders email/password text boxes as disabled if isSigningUp', () => {
@@ -36,8 +36,8 @@ describe('Login view', () => {
     );
     const submit = scryRenderedDOMComponentsWithTag(component, 'button');
 
-    expect(submit[0].getDOMNode().hasAttribute('disabled')).to.be.true;
-    expect(submit[1].getDOMNode().hasAttribute('disabled')).to.be.true;
+    expect(submit[0].hasAttribute('disabled')).to.be.true;
+    expect(submit[1].hasAttribute('disabled')).to.be.true;
   });
 
   it('runs callback with a new error message if validation of login does\'t pass', (done) => {
@@ -72,8 +72,8 @@ describe('Login view', () => {
     );
 
     const textBoxes = scryRenderedDOMComponentsWithTag(component, 'input');
-    const email = textBoxes[0].getDOMNode();
-    const pass = textBoxes[1].getDOMNode();
+    const email = textBoxes[0];
+    const pass = textBoxes[1];
     email.value = 'test@email.com';
     pass.value = 'mypass';
     Simulate.change(email);
@@ -95,8 +95,8 @@ describe('Login view', () => {
     );
 
     const textBoxes = scryRenderedDOMComponentsWithTag(component, 'input');
-    const email = textBoxes[0].getDOMNode();
-    const pass = textBoxes[1].getDOMNode();
+    const email = textBoxes[0];
+    const pass = textBoxes[1];
     email.value = 'test@email.com';
     pass.value = 'mypass';
     Simulate.change(email);
