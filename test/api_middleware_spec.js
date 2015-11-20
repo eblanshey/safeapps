@@ -1,4 +1,4 @@
-import {fromJS, Map, List} from 'immutable';
+import {fromJS, Map} from 'immutable';
 import sinon from 'sinon';
 import * as Firebase from '../src/js/firebaseRepository';
 import {restore} from './test_utils';
@@ -44,7 +44,7 @@ describe('api middleware', () => {
         expect(store.getState().getIn(['collections', 'approvedApps'])).to.equal(shouldBe);
         expect(setCollectionRequest.withArgs(Map({
           isLoading: false,
-          data: List()
+          data: Map()
         })).calledOnce).to.be.true;
         expect(setCollectionSuccess.calledOnce).to.be.true;
         restore(Firebase.getOnce);

@@ -29,7 +29,7 @@ export const AppListEntry = React.createClass({
 
 function mapStateToProps(state) {
   return {
-    appCollection: state.getIn(['collections', 'approvedApps'], List()),
+    appCollection: state.getIn(['collections', 'approvedApps'], Map()),
     apps: state.getIn(['entities', 'apps'], Map()),
     thumbs: state.getIn(['entities', 'thumbs'], Map())
   };
