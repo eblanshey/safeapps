@@ -27,6 +27,10 @@ let store = {
         data: app.json
       }
     }
+    appsExtended: {
+      isLoading: false,
+      data: app.json
+    }
   },
   collections: {
     admins: {

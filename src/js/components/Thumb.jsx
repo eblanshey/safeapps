@@ -10,23 +10,38 @@ export default React.createClass({
       React.PropTypes.number
     ]).isRequired,
     thumb: React.PropTypes.object,
-    size: React.PropTypes.number
+    size: React.PropTypes.number,
+    loadThumbEntity: React.PropTypes.func.isRequired
   },
 
   componentWillMount() {
-    if (!this.props.thumb) {
-      this.props.loadThumbEntity(this.props.userid, this.props.thumbid);
-    }
+    loadData.call(this, this.props);
+  },
+
+  componentWillReceiveProps(nextProps) {
+    loadData.call(this, nextProps);
   },
 
   render() {
     const {thumb, size} = this.props;
 
-    if (!thumb || thumb.get('isLoading') === true) {
-      return (<div><p>Loading image...</p></div>)
+    if (!thumb || thumb.get('isLoading')) {
+      return (<div><p>...</p></div>)
+    } else if (thumb && thumb.get('data')) {
+      let style = {
+        maxWidth: size,
+        maxHeight: size
+      };
+      return (<div><img className="Thumb" src={thumb.get('data')} style={style} /></div>);
     } else {
-      return (<div><img src={thumb.get('data')} width={size} height={size} /></div>)
+      return null;
     }
   }
 
 });
+
+function loadData(props) {
+  if (!props.thumb) {
+    props.loadThumbEntity(props.userid, props.thumbid);
+  }
+}

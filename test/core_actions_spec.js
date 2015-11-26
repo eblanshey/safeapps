@@ -1,9 +1,9 @@
 import {expect} from 'chai';
 import {fromJS} from 'immutable';
-import sinon from 'sinon';
 
 import * as actionTypes from '../src/js/actions/actionTypes';
 import * as actions from '../src/js/actions';
+import {CALL_API} from '../src/js/middleware/api';
 
 describe('core actions', () => {
   describe('global messages', () => {
@@ -78,6 +78,23 @@ describe('core actions', () => {
       const action = actions.signupFailure();
       expect(action).to.eql({
         type: actionTypes.SIGNUP_FAILURE
+      });
+    });
+
+  });
+
+  describe('fetching data', () => {
+
+    it('returns action for fetching extended app data', () => {
+      const action = actions.fetchAppExtendedEntity('userid', 'appid');
+      expect(action).to.eql({
+        [CALL_API]: {
+          types: ['EXTENDED_APP_REQUEST', 'EXTENDED_APP_SUCCESS', 'EXTENDED_APP_FAILURE'],
+          endpoint: `users/userid/appsExtended/appid`,
+          entityOrCollection: 'entity',
+          id: 'appid',
+          name: 'appsExtended'
+        }
       });
     });
 

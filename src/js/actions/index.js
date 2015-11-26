@@ -76,6 +76,18 @@ export function fetchAppEntity(userid, appid) {
   };
 }
 
+export function fetchAppExtendedEntity(userid, appid) {
+  return {
+      [CALL_API]: {
+        types: [actionTypes.APP_REQUEST, actionTypes.APP_SUCCESS, actionTypes.APP_FAILURE],
+        endpoint: `users/${userid}/appsExtended/${appid}`,
+        entityOrCollection: 'entity',
+        id: appid,
+        name: 'appsExtended'
+      }
+  };
+}
+
 export function fetchThumbEntity(userid, thumbid) {
   return {
       [CALL_API]: {

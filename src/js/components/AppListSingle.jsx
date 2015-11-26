@@ -1,4 +1,5 @@
 import React from 'react/addons';
+import {Link} from 'react-router';
 
 import Thumb from './Thumb';
 
@@ -39,7 +40,7 @@ export default React.createClass({
             size={50}
             loadThumbEntity={this.props.loadThumbEntity}
             />
-          <h2>{appData.get('humanName')}</h2>
+          <h2><Link to={`/app/${userid}/${id}`}>{appData.get('humanName')}</Link></h2>
 
           <h3>{appData.get('caption')}</h3>
         </div>

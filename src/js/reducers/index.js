@@ -73,6 +73,10 @@ function entities(entityState, action) {
     data: null
   });
 
+  if (action[API].name == 'appsExtended') {
+    console.log('THE ACTION');
+  }
+
   switch (action[API].stage) {
     case 'request':
       return entityState.updateIn([action[API].name, action[API].id], defaultEntity, entity => reducers.setEntityRequest(entity));

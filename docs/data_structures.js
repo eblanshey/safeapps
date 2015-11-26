@@ -14,8 +14,8 @@ let categories = {
 // Claimed slugs.
 // Owner: admin
 // Permissions: read, append
-let location = '/admin/slugs/$slug';
-let slug = {userid, appid};
+//let location = '/admin/slugs/$slug';
+//let slug = {userid, appid};
 
 // User profile. Created upon signup
 // Owner: user
@@ -60,6 +60,7 @@ let app = {
   thumbid: `$thumbId`
 }
 // Loaded only when this app is being viewed. Should contain everything else
+let location = `/user/appsExtended/$appid`;
 let appExtended = {
   descriptionFormat: 'text', // support markdown
   description: 'This will be a much longer description.',

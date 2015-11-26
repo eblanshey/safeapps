@@ -1,6 +1,6 @@
 import React from 'react/addons';
 import {connect} from 'react-redux';
-import {Map, List} from 'immutable';
+import {Map} from 'immutable';
 
 import AppList from '../components/AppList';
 import {loadApprovedAppCollection} from '../actions/thunks';
@@ -29,9 +29,9 @@ export const AppListEntry = React.createClass({
 
 function mapStateToProps(state) {
   return {
-    appCollection: state.getIn(['collections', 'approvedApps'], Map()),
-    apps: state.getIn(['entities', 'apps'], Map()),
-    thumbs: state.getIn(['entities', 'thumbs'], Map())
+    appCollection: state.getIn(['collections', 'approvedApps']),
+    apps: state.getIn(['entities', 'apps']),
+    thumbs: state.getIn(['entities', 'thumbs'])
   };
 }
 

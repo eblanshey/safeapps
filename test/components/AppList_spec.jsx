@@ -1,7 +1,6 @@
 import React from 'react/addons';
 import {expect} from 'chai';
 import {fromJS, Map} from 'immutable';
-import sinon from 'sinon';
 
 import AppList from '../../src/js/components/AppList';
 import AppListSingle from '../../src/js/components/AppListSingle';
@@ -18,8 +17,8 @@ const defaultAppListProps = {
   fetchAppCollection: function() {},
   loadAppEntity: function() {},
   loadAppCollection: function() {},
-  appCollection: Map(),
-  apps: Map()
+  appCollection: null,
+  apps: null
 };
 
 describe('AppList component', () => {

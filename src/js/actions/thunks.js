@@ -67,6 +67,17 @@ export function loadAppEntity(userid, appid) {
     return dispatch(actions.fetchAppEntity(userid, appid));
   }
 }
+export function loadAppExtendedEntity(userid, appid) {
+  return (dispatch, getState) => {
+    const app = getState().getIn(['entities', 'appsExtended', appid]);
+
+    if (app) {
+      return null;
+    }
+
+    return dispatch(actions.fetchAppExtendedEntity(userid, appid));
+  }
+}
 export function loadThumbEntity(userid, thumbid) {
   return (dispatch, getState) => {
     const app = getState().getIn(['entities', 'thumbs', thumbid]);
