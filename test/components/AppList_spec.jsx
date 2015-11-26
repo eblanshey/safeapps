@@ -1,4 +1,5 @@
-import React from 'react/addons';
+import React from 'react';
+import TestUtils from 'react-addons-test-utils';
 import {expect} from 'chai';
 import {fromJS, Map} from 'immutable';
 
@@ -11,7 +12,7 @@ const {
   scryRenderedDOMComponentsWithTag,
   Simulate,
   mockComponent
-  } = React.addons.TestUtils;
+  } = TestUtils;
 
 const defaultAppListProps = {
   fetchAppCollection: function() {},

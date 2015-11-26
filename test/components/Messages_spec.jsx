@@ -1,4 +1,5 @@
-import React from 'react/addons';
+import React from 'react';
+import TestUtils from 'react-addons-test-utils';
 import {expect} from 'chai';
 import {fromJS} from 'immutable';
 
@@ -9,7 +10,7 @@ const {
   scryRenderedDOMComponentsWithClass,
   scryRenderedDOMComponentsWithTag,
   Simulate
-  } = React.addons.TestUtils;
+  } = TestUtils;
 
 describe('GlobalMessages component', () => {
 

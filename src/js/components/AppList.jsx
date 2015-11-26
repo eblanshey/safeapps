@@ -1,10 +1,11 @@
-import React from 'react/addons';
+import React from 'react';
+import Pure from 'react-addons-pure-render-mixin';
 import {Map} from 'immutable';
 
 import AppListSingle from './AppListSingle';
 
 export default React.createClass({
-  mixins: [React.addons.PureRenderMixin],
+  mixins: [Pure],
 
   propTypes: {
     appCollection: React.PropTypes.object,

@@ -1,4 +1,5 @@
-import React from 'react/addons';
+import React from 'react';
+import Pure from 'react-addons-pure-render-mixin';
 import {connect} from 'react-redux';
 import {Map} from 'immutable';
 
@@ -6,7 +7,7 @@ import Thumb from '../components/Thumb';
 import {loadAppEntity, loadAppExtendedEntity, loadThumbEntity} from '../actions/thunks';
 
 export const AppEntry = React.createClass({
-  mixins: [React.addons.PureRenderMixin],
+  mixins: [Pure],
 
   attemptedToLoadThumb: {},
 

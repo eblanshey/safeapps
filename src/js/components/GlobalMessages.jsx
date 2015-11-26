@@ -1,10 +1,11 @@
-import React from 'react/addons';
+import React from 'react';
+import Pure from 'react-addons-pure-render-mixin';
 import {connect} from 'react-redux';
 
 import {removeGlobalMessage} from '../actions';
 
 export const GlobalMessages = React.createClass({
-  mixins: [React.addons.PureRenderMixin],
+  mixins: [Pure],
 
   messages(type) {
     return this.props.messages.get(type, []);

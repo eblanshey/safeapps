@@ -1728,6 +1728,11 @@
         }
       }
     },
+    "react-addons-pure-render-mixin": {
+      "version": "0.14.3",
+      "from": "react-addons-pure-render-mixin@",
+      "resolved": "https://registry.npmjs.org/react-addons-pure-render-mixin/-/react-addons-pure-render-mixin-0.14.3.tgz"
+    },
     "react-addons-test-utils": {
       "version": "0.14.3",
       "from": "react-addons-test-utils@",

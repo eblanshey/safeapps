@@ -1,7 +1,8 @@
-import React from 'react/addons';
+import React from 'react';
+import Pure from 'react-addons-pure-render-mixin';
 
 export default React.createClass({
-  mixins: [React.addons.PureRenderMixin],
+  mixins: [Pure],
 
   propTypes: {
     userid: React.PropTypes.string.isRequired,

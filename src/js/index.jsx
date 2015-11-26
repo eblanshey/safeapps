@@ -1,4 +1,5 @@
 import React from 'react';
+import DOM from 'react-dom';
 import Router, {Route, IndexRoute} from 'react-router';
 import {createStore, applyMiddleware} from 'redux';
 import reducer from './reducers';
@@ -36,7 +37,7 @@ const routes = (
   </Route>
 );
 
-React.render(
+DOM.render(
   <Provider store={store}>
     <Router>
       {routes}

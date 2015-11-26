@@ -1,10 +1,11 @@
-import React from 'react/addons';
+import React from 'react';
+import TestUtils from 'react-addons-test-utils';
 import {expect} from 'chai';
 import {Map, fromJS} from 'immutable';
 
 import {Login} from '../../src/js/views/Login';
 
-const {renderIntoDocument, scryRenderedDOMComponentsWithTag, Simulate} = React.addons.TestUtils;
+const {renderIntoDocument, scryRenderedDOMComponentsWithTag, Simulate} = TestUtils;
 
 describe('Login view', () => {
 

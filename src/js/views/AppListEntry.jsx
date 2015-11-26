@@ -1,4 +1,5 @@
-import React from 'react/addons';
+import React from 'react';
+import Pure from 'react-addons-pure-render-mixin';
 import {connect} from 'react-redux';
 import {Map} from 'immutable';
 
@@ -8,7 +9,7 @@ import {loadAppEntity, loadThumbEntity} from '../actions/thunks';
 import {fetchApprovedAppCollection} from '../actions';
 
 export const AppListEntry = React.createClass({
-  mixins: [React.addons.PureRenderMixin],
+  mixins: [Pure],
 
   allowedStatuses: [
     'approved', 'denied', 'pending'

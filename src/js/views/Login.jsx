@@ -1,4 +1,6 @@
-import React from 'react/addons';
+import React from 'react';
+import DOM from 'react-dom';
+import Pure from 'react-addons-pure-render-mixin';
 import {fromJS} from 'immutable';
 import {connect} from 'react-redux';
 
@@ -6,7 +8,7 @@ import {submitEmailLogin, signup} from '../actions/thunks';
 import {addGlobalMessage} from '../actions';
 
 export const Login = React.createClass({
-  mixins: [React.addons.PureRenderMixin],
+  mixins: [Pure],
 
   componentWillMount: function() {
     transitionIfNeeded.call(this, this.props);
@@ -17,8 +19,8 @@ export const Login = React.createClass({
   },
 
   logIn(e) {
-    const email = React.findDOMNode(this.refs.email).value;
-    const password = React.findDOMNode(this.refs.password).value;
+    const email = DOM.findDOMNode(this.refs.email).value;
+    const password = DOM.findDOMNode(this.refs.password).value;
     
     if (!email || !password) {
       this.props.addGlobalMessage('error', 'You need to enter an email and password.');
@@ -29,8 +31,8 @@ export const Login = React.createClass({
   },
 
   signUp(e) {
-    const email = React.findDOMNode(this.refs.email).value;
-    const password = React.findDOMNode(this.refs.password).value;
+    const email = DOM.findDOMNode(this.refs.email).value;
+    const password = DOM.findDOMNode(this.refs.password).value;
 
     if (!email || !password) {
       this.props.addGlobalMessage('error', 'You need to enter an email and password.');
