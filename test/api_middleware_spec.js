@@ -44,7 +44,7 @@ describe('api middleware', () => {
         expect(store.getState().getIn(['collections', 'approvedApps'])).to.equal(shouldBe);
         expect(setCollectionRequest.withArgs(Map({
           isLoading: false,
-          data: Map()
+          data: null
         })).calledOnce).to.be.true;
         expect(setCollectionSuccess.calledOnce).to.be.true;
         restore(Firebase.getOnce);

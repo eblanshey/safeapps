@@ -56,22 +56,22 @@ export function signupFailure() {
 }
 
 export function fetchAppCollection(status) {
-  const types = [actionTypes.APPROVED_APPS_REQUEST, actionTypes.APPROVED_APPS_SUCCESS, actionTypes.APPROVED_APPS_FAILURE];
+  const types = [actionTypes.FETCH_COLLECTION_REQUEST, actionTypes.FETCH_COLLECTION_SUCCESS, actionTypes.FETCH_COLLECTION_FAILURE];
   return buildApiAction('fetch', types, 'collection', `${status}Apps`, adminid);
 }
 
 export function fetchAppEntity(userid, appid) {
-  const types = [actionTypes.APP_REQUEST, actionTypes.APP_SUCCESS, actionTypes.APP_FAILURE];
+  const types = [actionTypes.FETCH_ENTITY_REQUEST, actionTypes.FETCH_ENTITY_SUCCESS, actionTypes.FETCH_ENTITY_FAILURE];
   return buildApiAction('fetch', types, 'entity', 'apps', userid, appid);
 }
 
 export function fetchAppExtendedEntity(userid, appid) {
-  const types = [actionTypes.APP_REQUEST, actionTypes.APP_SUCCESS, actionTypes.APP_FAILURE];
+  const types = [actionTypes.FETCH_ENTITY_REQUEST, actionTypes.FETCH_ENTITY_SUCCESS, actionTypes.FETCH_ENTITY_FAILURE];
   return buildApiAction('fetch', types, 'entity', 'appsExtended', userid, appid);
 }
 
 export function fetchThumbEntity(userid, thumbid) {
-  const types = [actionTypes.THUMB_REQUEST, actionTypes.THUMB_SUCCESS, actionTypes.THUMB_FAILURE];
+  const types = [actionTypes.FETCH_ENTITY_REQUEST, actionTypes.FETCH_ENTITY_SUCCESS, actionTypes.FETCH_ENTITY_FAILURE];
   return buildApiAction('fetch', types, 'entity', 'thumbs', userid, thumbid);
 }
 

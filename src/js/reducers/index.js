@@ -42,29 +42,34 @@ function signup(signupState, action) {
 }
 
 function collections(collectionState, action) {
-  if (!action[API] || action[API].entityOrCollection !== 'collection') {
+  if (
+    !action[API] ||
+    ['FETCH_COLLECTION_REQUEST', 'FETCH_COLLECTION_SUCCESS', 'FETCH_COLLECTION_FAILURE'].indexOf(action.type) < 0
+  ) {
     return collectionState;
   }
 
   const defaultCollection = Map({
     isLoading: false,
-    data: Map()
+    data: null
   });
 
-  switch (action[API].stage) {
-    case 'request':
-      return collectionState.update(action[API].name, defaultCollection, collection => reducers.setCollectionRequest(collection));
-    case 'success':
-      return collectionState.update(action[API].name, defaultCollection, collection => reducers.setCollectionSuccess(collection, action.data));
-    case 'failure':
-      return collectionState.update(action[API].name, defaultCollection, collection => reducers.setCollectionFailure(collection, action.error));
-    default:
-      throw new Error(`Got invalid API stage: ${action[API].stage}`);
+  if (action.type.indexOf('REQUEST') > -1) {
+    return collectionState.update(action[API].name, defaultCollection, collection => reducers.setCollectionRequest(collection));
+  } else if (action.type.indexOf('SUCCESS') > -1) {
+    return collectionState.update(action[API].name, defaultCollection, collection => reducers.setCollectionSuccess(collection, action.data));
+  } else if (action.type.indexOf('FAILURE') > -1) {
+    return collectionState.update(action[API].name, defaultCollection, collection => reducers.setCollectionFailure(collection, action.error));
+  } else {
+    throw new Error('Got invalid type', action.type);
   }
 }
 
 function entities(entityState, action) {
-  if (!action[API] || action[API].entityOrCollection !== 'entity') {
+  if (
+    !action[API] ||
+    ['FETCH_ENTITY_REQUEST', 'FETCH_ENTITY_SUCCESS', 'FETCH_ENTITY_FAILURE'].indexOf(action.type) < 0
+  ) {
     return entityState;
   }
 
@@ -73,19 +78,14 @@ function entities(entityState, action) {
     data: null
   });
 
-  if (action[API].name == 'appsExtended') {
-    console.log('THE ACTION');
-  }
-
-  switch (action[API].stage) {
-    case 'request':
-      return entityState.updateIn([action[API].name, action[API].id], defaultEntity, entity => reducers.setEntityRequest(entity));
-    case 'success':
-      return entityState.updateIn([action[API].name, action[API].id], defaultEntity, entity => reducers.setEntitySuccess(entity, action.data));
-    case 'failure':
-      return entityState.updateIn([action[API].name, action[API].id], defaultEntity, entity => reducers.setEntityFailure(entity, action.error));
-    default:
-      throw new Error(`Got invalid API stage: ${action[API].stage}`);
+  if (action.type.indexOf('REQUEST') > -1) {
+    return entityState.updateIn([action[API].name, action[API].id], defaultEntity, entity => reducers.setEntityRequest(entity));
+  } else if (action.type.indexOf('SUCCESS') > -1) {
+    return entityState.updateIn([action[API].name, action[API].id], defaultEntity, entity => reducers.setEntitySuccess(entity, action.data));
+  } else if (action.type.indexOf('FAILURE') > -1) {
+    return entityState.updateIn([action[API].name, action[API].id], defaultEntity, entity => reducers.setEntityFailure(entity, action.error));
+  } else {
+    throw new Error('Got invalid type', action.type);
   }
 }
 
