@@ -89,7 +89,7 @@ describe('core actions', () => {
       const action = actions.fetchAppExtendedEntity('userid', 'appid');
       expect(action).to.eql({
         [CALL_API]: {
-          types: ['EXTENDED_APP_REQUEST', 'EXTENDED_APP_SUCCESS', 'EXTENDED_APP_FAILURE'],
+          types: ['APP_EXTENDED_REQUEST', 'APP_EXTENDED_SUCCESS', 'APP_EXTENDED_FAILURE'],
           endpoint: `users/userid/appsExtended/appid`,
           entityOrCollection: 'entity',
           id: 'appid',

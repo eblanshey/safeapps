@@ -66,9 +66,9 @@ export default React.createClass({
 });
 
 function loadApps(props) {
-   return props.loadAppCollection();
+   return props.loadAppCollection('approved');
 }
 
 function fetchApps() {
-  return this.props.fetchAppCollection();
+  return this.props.fetchAppCollection('approved');
 }

@@ -44,15 +44,15 @@ export function signup(email, password) {
   }
 }
 
-export function loadApprovedAppCollection() {
+export function loadAppCollection(status) {
   return (dispatch, getState) => {
-    const apps = getState().getIn(['collections', 'approvedApps']);
+    const apps = getState().getIn(['collections', `${status}Apps`]);
 
     if (apps && apps.size > 0) {
       return null;
     }
 
-    return dispatch(actions.fetchApprovedAppCollection());
+    return dispatch(actions.fetchAppCollection(status));
   }
 }
 

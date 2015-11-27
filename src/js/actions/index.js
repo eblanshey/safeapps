@@ -2,6 +2,8 @@ import * as actionTypes from './actionTypes';
 import {CALL_API} from '../middleware/api';
 import config from '../config';
 
+const adminid = config.adminId;
+
 // Global messages
 export function addGlobalMessage(messageType, text) {
   return {
@@ -53,49 +55,35 @@ export function signupFailure() {
   }
 }
 
-export function fetchApprovedAppCollection() {
-  return {
-      [CALL_API]: {
-        types: [actionTypes.APPROVED_APPS_REQUEST, actionTypes.APPROVED_APPS_SUCCESS, actionTypes.APPROVED_APPS_FAILURE],
-        endpoint: `users/${config.adminId}/approvedApps`,
-        entityOrCollection: 'collection',
-        name: 'approvedApps'
-      }
-  };
+export function fetchAppCollection(status) {
+  const types = [actionTypes.APPROVED_APPS_REQUEST, actionTypes.APPROVED_APPS_SUCCESS, actionTypes.APPROVED_APPS_FAILURE];
+  return buildApiAction('fetch', types, 'collection', `${status}Apps`, adminid);
 }
 
 export function fetchAppEntity(userid, appid) {
-  return {
-      [CALL_API]: {
-        types: [actionTypes.APP_REQUEST, actionTypes.APP_SUCCESS, actionTypes.APP_FAILURE],
-        endpoint: `users/${userid}/apps/${appid}`,
-        entityOrCollection: 'entity',
-        id: appid,
-        name: 'apps'
-      }
-  };
+  const types = [actionTypes.APP_REQUEST, actionTypes.APP_SUCCESS, actionTypes.APP_FAILURE];
+  return buildApiAction('fetch', types, 'entity', 'apps', userid, appid);
 }
 
 export function fetchAppExtendedEntity(userid, appid) {
-  return {
-      [CALL_API]: {
-        types: [actionTypes.APP_REQUEST, actionTypes.APP_SUCCESS, actionTypes.APP_FAILURE],
-        endpoint: `users/${userid}/appsExtended/${appid}`,
-        entityOrCollection: 'entity',
-        id: appid,
-        name: 'appsExtended'
-      }
-  };
+  const types = [actionTypes.APP_REQUEST, actionTypes.APP_SUCCESS, actionTypes.APP_FAILURE];
+  return buildApiAction('fetch', types, 'entity', 'appsExtended', userid, appid);
 }
 
 export function fetchThumbEntity(userid, thumbid) {
+  const types = [actionTypes.THUMB_REQUEST, actionTypes.THUMB_SUCCESS, actionTypes.THUMB_FAILURE];
+  return buildApiAction('fetch', types, 'entity', 'thumbs', userid, thumbid);
+}
+
+function buildApiAction(request, types, entityOrCollection, name, userid, id) {
   return {
-      [CALL_API]: {
-        types: [actionTypes.THUMB_REQUEST, actionTypes.THUMB_SUCCESS, actionTypes.THUMB_FAILURE],
-        endpoint: `users/${userid}/thumbs/${thumbid}`,
-        entityOrCollection: 'entity',
-        id: thumbid,
-        name: 'thumbs'
-      }
-  };
+    [CALL_API]: {
+      request,
+      types,
+      entityOrCollection,
+      name,
+      id,
+      endpoint: `users/${userid}/${name}`+(entityOrCollection === 'entity' ? `/${id}` : '')
+    }
+  }
 }

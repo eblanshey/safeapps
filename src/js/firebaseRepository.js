@@ -33,3 +33,18 @@ export function getOnce(endpoint) {
     .once('value')
     .then(snapshot => snapshot.val());
 }
+export function set(endpoint, data) {
+  return fp
+    .child(endpoint)
+    .set(data);
+}
+export function push(endpoint, data) {
+  return fp
+    .child(endpoint)
+    .set(data);
+}
+export function remove(endpoint) {
+  return fp
+    .child(endpoint)
+    .remove();
+}

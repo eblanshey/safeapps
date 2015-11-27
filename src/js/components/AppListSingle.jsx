@@ -53,7 +53,3 @@ export default React.createClass({
     )
   }
 });
-
-function loadAppEntity(userid, id) {
-  return props.loadAppCollection();
-}

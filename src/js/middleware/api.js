@@ -14,8 +14,14 @@ export default store => next => action => {
     return next(action);
   }
 
-  const { collection, entity, types, endpoint, entityOrCollection, id, name } = callAPI;
+  const { request, collection, entity, types, endpoint, entityOrCollection, id, name, data } = callAPI;
 
+  if (!request || ['fetch', 'put', 'push', 'delete'].indexOf(request) < 0) {
+    throw new Error('Request must be of type fetch, put, push, or delete');
+  }
+  if ((request === 'put' || request === 'push') && !data) {
+    throw new Error('If putting/pushing new data, you must supply the data.');
+  }
   if (typeof endpoint !== 'string') {
     throw new Error('Specify a string endpoint URL.');
   }
@@ -26,7 +32,7 @@ export default store => next => action => {
     throw new Error('Specify whether this is a collection or entity request.')
   }
   if (entityOrCollection === 'entity' && ! id) {
-    throw new Error('An ID must be provided with entity rerquests.');
+    throw new Error('An ID must be provided with entity requests.');
   }
   if (!name) {
     throw new Error('Specify the entity/collection name.');
@@ -47,7 +53,8 @@ export default store => next => action => {
       stage,
       entityOrCollection: finalAction[CALL_API].entityOrCollection,
       name: finalAction[CALL_API].name,
-      id: finalAction[CALL_API].id
+      id: finalAction[CALL_API].id,
+      data: finalAction[CALL_API].data,
     }
     delete finalAction[CALL_API];
     return finalAction;

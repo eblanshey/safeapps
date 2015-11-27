@@ -6,7 +6,7 @@ import {createStore, applyMiddleware} from 'redux';
 import {expect} from 'chai';
 
 import apiMiddleware from '../src/js/middleware/api';
-import {fetchApprovedAppCollection, fetchAppEntity} from '../src/js/actions';
+import {fetchAppCollection, fetchAppEntity} from '../src/js/actions';
 import reducer from '../src/js/reducers';
 import * as coreReducers from '../src/js/reducers/core';
 
@@ -33,7 +33,7 @@ describe('api middleware', () => {
     const setCollectionSuccess = sinon
       .spy(coreReducers, 'setCollectionSuccess');
 
-    const result = store.dispatch(fetchApprovedAppCollection());
+    const result = store.dispatch(fetchAppCollection('approved'));
     result.then((data) => {
         const shouldBe = fromJS({
           isLoading: false,

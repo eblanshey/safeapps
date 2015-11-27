@@ -4,9 +4,9 @@ import {connect} from 'react-redux';
 import {Map} from 'immutable';
 
 import AppList from '../components/AppList';
-import {loadApprovedAppCollection} from '../actions/thunks';
+import {loadAppCollection} from '../actions/thunks';
 import {loadAppEntity, loadThumbEntity} from '../actions/thunks';
-import {fetchApprovedAppCollection} from '../actions';
+import {fetchAppCollection} from '../actions';
 
 export const AppListEntry = React.createClass({
   mixins: [Pure],
@@ -38,8 +38,8 @@ function mapStateToProps(state) {
 
 function mapActionsToProps(dispatch) {
   return {
-    loadAppCollection: (...args) => dispatch(loadApprovedAppCollection(...args)),
-    fetchAppCollection: (...args) => dispatch(fetchApprovedAppCollection(...args)),
+    loadAppCollection: (...args) => dispatch(loadAppCollection(...args)),
+    fetchAppCollection: (...args) => dispatch(fetchAppCollection(...args)),
     loadAppEntity: (...args) => dispatch(loadAppEntity(...args)),
     loadThumbEntity: (...args) => dispatch(loadThumbEntity(...args))
   }

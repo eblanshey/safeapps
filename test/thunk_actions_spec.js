@@ -154,14 +154,14 @@ describe('thunk actions', () => {
         });
       }
 
-      const fetchApprovedAppCollection = sinon
-        .stub(actions, 'fetchApprovedAppCollection');
+      const fetchAppCollection = sinon
+        .stub(actions, 'fetchAppCollection');
 
       thunks
-        .loadApprovedAppCollection()(dispatch, getState);
+        .loadAppCollection('approved')(dispatch, getState);
 
-      expect(fetchApprovedAppCollection.withArgs().calledOnce).to.be.true;
-      restore(fetchApprovedAppCollection);
+      expect(fetchAppCollection.withArgs().calledOnce).to.be.true;
+      restore(fetchAppCollection);
     });
 
     it('does not load an approved app collections that exists', () => {
@@ -175,15 +175,15 @@ describe('thunk actions', () => {
         });
       }
 
-      const fetchApprovedAppCollection = sinon
-        .stub(actions, 'fetchApprovedAppCollection');
+      const fetchAppCollection = sinon
+        .stub(actions, 'fetchAppCollection');
 
       const result = thunks
-        .loadApprovedAppCollection()(dispatch, getState);
+        .loadAppCollection('approved')(dispatch, getState);
 
       expect(result).to.be.null;
-      expect(fetchApprovedAppCollection.calledOnce).to.be.false;
-      restore(fetchApprovedAppCollection);
+      expect(fetchAppCollection.calledOnce).to.be.false;
+      restore(fetchAppCollection);
     });
 
 
