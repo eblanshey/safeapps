@@ -57,33 +57,31 @@ export function signupFailure() {
 
 export function fetchAppCollection(status) {
   const types = [actionTypes.FETCH_COLLECTION_REQUEST, actionTypes.FETCH_COLLECTION_SUCCESS, actionTypes.FETCH_COLLECTION_FAILURE];
-  return buildApiAction('fetch', types, 'collection', `${status}Apps`, adminid);
+  return buildApiAction({types, entityOrCollection: 'collection', name: `${status}Apps`, userid: adminid});
 }
 
 export function fetchAppEntity(userid, appid) {
   const types = [actionTypes.FETCH_ENTITY_REQUEST, actionTypes.FETCH_ENTITY_SUCCESS, actionTypes.FETCH_ENTITY_FAILURE];
-  return buildApiAction('fetch', types, 'entity', 'apps', userid, appid);
+  return buildApiAction({types, entityOrCollection: 'entity', name: 'apps', userid, id: appid});
 }
 
 export function fetchAppExtendedEntity(userid, appid) {
   const types = [actionTypes.FETCH_ENTITY_REQUEST, actionTypes.FETCH_ENTITY_SUCCESS, actionTypes.FETCH_ENTITY_FAILURE];
-  return buildApiAction('fetch', types, 'entity', 'appsExtended', userid, appid);
+  return buildApiAction({types, entityOrCollection: 'entity', name: 'appsExtended', userid, id: appid});
 }
 
 export function fetchThumbEntity(userid, thumbid) {
   const types = [actionTypes.FETCH_ENTITY_REQUEST, actionTypes.FETCH_ENTITY_SUCCESS, actionTypes.FETCH_ENTITY_FAILURE];
-  return buildApiAction('fetch', types, 'entity', 'thumbs', userid, thumbid);
+  return buildApiAction({types, entityOrCollection: 'entity', name: 'thumbs', userid, id: thumbid});
 }
 
-function buildApiAction(request, types, entityOrCollection, name, userid, id) {
+export function putNewThumbEntity(userid, thumbid) {
+  const types = [actionTypes.FETCH_ENTITY_REQUEST, actionTypes.FETCH_ENTITY_SUCCESS, actionTypes.FETCH_ENTITY_FAILURE];
+  return buildApiAction({types, entityOrCollection: 'entity', name: 'thumbs', userid, id: thumbid});
+}
+
+function buildApiAction(options) {
   return {
-    [CALL_API]: {
-      request,
-      types,
-      entityOrCollection,
-      name,
-      id,
-      endpoint: `users/${userid}/${name}`+(entityOrCollection === 'entity' ? `/${id}` : '')
-    }
+    [CALL_API]: options
   }
 }

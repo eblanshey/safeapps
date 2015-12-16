@@ -1,4 +1,4 @@
-import {getOnce} from '../firebaseRepository';
+import * as Firebase from '../firebaseRepository';
 import {addGlobalMessage} from '../actions';
 
 // Action key that carries API call info interpreted by this Redux middleware.
@@ -14,18 +14,14 @@ export default store => next => action => {
     return next(action);
   }
 
-  const { collection, entity, types, endpoint, id, name, data } = callAPI;
+  const { collection, entity, types, id, name, data, onSuccess, onFailure } = callAPI;
 
-  if (types[0].indexOf('COLLECTION') > -1) {
-    var entityOrCollection = 'collection';
-  } else if (types[0].indexOf('ENTITY') > -1) {
-    var entityOrCollection = 'entity';
-  } else {
-    throw new Error('Got invalid types', types[0]);
-  }
+  let entityOrCollection = isEntityOrCollection(types),
+    endpoint = generateApiEndpoint(callAPI),
+    request = types[0].substr(0, types[0].indexOf('_'));
 
-  if (typeof endpoint !== 'string') {
-    throw new Error('Specify a string endpoint URL.');
+  if (['PUT', 'PUSH'].indexOf(request) > -1 && !data) {
+    throw new Error('PUT and PUSH requests must provide data.');
   }
   if (endpoint.startsWith('http') || endpoint.startsWith('safe:')) {
     throw new Error('Don\'t pass the entire url, just the URI.');
@@ -57,14 +53,51 @@ export default store => next => action => {
     return finalAction;
   }
 
-  const [requestType, successType, failureType] = types;
-  next(actionWith({ type: requestType }));
+  const [typeRequest, typeSuccess, typeFailure] = types;
+  next(actionWith({ type: typeRequest }));
 
-  return getOnce(endpoint).then(
-      data => next(actionWith({type: successType, data})),
-      error => {
-        addGlobalMessage('error', error.message || 'Something bad happened');
-        return next(actionWith({type: failureType}))
-      }
-  );
+  let successClosure = data => {
+    if (onSuccess) {
+      store.dispatch(onSuccess(data));
+    }
+
+    return next(actionWith({type: typeSuccess, data}));
+  };
+  let errorClosure = error => {
+    if (onFailure) {
+      store.dispatch(onFailure(data.message));
+    }
+
+    addGlobalMessage('error', error.message || 'Something bad happened');
+    return next(actionWith({type: typeFailure}))
+  };
+
+  switch (request) {
+    case 'FETCH':
+      return Firebase.getOnce(endpoint).then(successClosure, errorClosure);
+    case 'PUT':
+      return Firebase.set(endpoint, data).then(successClosure, errorClosure);
+    case 'PUSH':
+      return Firebase.push(endpoint, data).then(successClosure, errorClosure);
+    case 'DELETE':
+      return Firebase.remove(endpoint).then(successClosure, errorClosure);
+    default:
+      throw new Error('Got invalid request', request);
+  }
 };
+
+function isEntityOrCollection(types) {
+  if (types[0].indexOf('COLLECTION') > -1) {
+    return 'collection';
+  } else if (types[0].indexOf('ENTITY') > -1) {
+    return 'entity';
+  } else {
+    throw new Error('Got invalid type', types[0]);
+  }
+}
+
+function generateApiEndpoint(options) {
+  return options.endpoint ?
+    options.endpoint :
+    `users/${options.userid}/${options.name}`+(options.entityOrCollection === 'entity' ? `/${options.id}` : '');
+}

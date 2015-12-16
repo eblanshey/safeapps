@@ -38,10 +38,12 @@ export function set(endpoint, data) {
     .child(endpoint)
     .set(data);
 }
+// Firebase's PUSH will enable us to return the unique id.
 export function push(endpoint, data) {
   return fp
     .child(endpoint)
-    .set(data);
+    .push(data)
+    .then(data => data.key());
 }
 export function remove(endpoint) {
   return fp
