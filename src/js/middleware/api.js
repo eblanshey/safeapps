@@ -1,5 +1,6 @@
 import * as Firebase from '../firebaseRepository';
 import {addGlobalMessage} from '../actions';
+import uuid from '../utils/uuid';
 
 // Action key that carries API call info interpreted by this Redux middleware.
 export const CALL_API = Symbol('CALL_API');
@@ -14,17 +15,14 @@ export default store => next => action => {
     return next(action);
   }
 
-  const { collection, entity, types, id, name, data, onSuccess, onFailure } = callAPI;
+  const { collection, entity, types, userid, name, data, onSuccess, onFailure } = callAPI;
+  let { id, endpoint } = callAPI;
 
-  let entityOrCollection = isEntityOrCollection(types),
-    endpoint = generateApiEndpoint(callAPI),
-    request = types[0].substr(0, types[0].indexOf('_'));
+  let request = types[0].substr(0, types[0].indexOf('_')),
+    entityOrCollection = isEntityOrCollection(types);
 
-  if (['PUT', 'PUSH'].indexOf(request) > -1 && !data) {
+  if (request === 'PUT' && !data) {
     throw new Error('PUT and PUSH requests must provide data.');
-  }
-  if (endpoint.startsWith('http') || endpoint.startsWith('safe:')) {
-    throw new Error('Don\'t pass the entire url, just the URI.');
   }
   if (entityOrCollection === 'entity' && ! id) {
     throw new Error('An ID must be provided with entity requests.');
@@ -42,6 +40,13 @@ export default store => next => action => {
     throw new Error('Expected action types to be strings.');
   }
 
+  // If an ID was not provided, we need to generate one
+  if (request === 'PUT' && !id) {
+    id = uuid();
+  }
+
+  endpoint = endpoint ? endpoint : generateApiEndpoint(userid, name, id);
+
   function actionWith(data) {
     const finalAction = Object.assign({}, action, data);
     finalAction[API] = {
@@ -58,7 +63,7 @@ export default store => next => action => {
 
   let successClosure = data => {
     if (onSuccess) {
-      store.dispatch(onSuccess(data));
+      store.dispatch(onSuccess(id));
     }
 
     return next(actionWith({type: typeSuccess, data}));
@@ -77,8 +82,6 @@ export default store => next => action => {
       return Firebase.getOnce(endpoint).then(successClosure, errorClosure);
     case 'PUT':
       return Firebase.set(endpoint, data).then(successClosure, errorClosure);
-    case 'PUSH':
-      return Firebase.push(endpoint, data).then(successClosure, errorClosure);
     case 'DELETE':
       return Firebase.remove(endpoint).then(successClosure, errorClosure);
     default:
@@ -96,8 +99,6 @@ function isEntityOrCollection(types) {
   }
 }
 
-function generateApiEndpoint(options) {
-  return options.endpoint ?
-    options.endpoint :
-    `users/${options.userid}/${options.name}`+(options.entityOrCollection === 'entity' ? `/${options.id}` : '');
+function generateApiEndpoint(userid, name, id) {
+  return `users/${userid}/${name}`+(id ? `/${id}` : '');
 }

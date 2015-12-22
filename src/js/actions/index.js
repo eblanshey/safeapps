@@ -57,27 +57,34 @@ export function signupFailure() {
 
 export function fetchAppCollection(status) {
   const types = [actionTypes.FETCH_COLLECTION_REQUEST, actionTypes.FETCH_COLLECTION_SUCCESS, actionTypes.FETCH_COLLECTION_FAILURE];
-  return buildApiAction({types, entityOrCollection: 'collection', name: `${status}Apps`, userid: adminid});
+  return buildApiAction({types, name: `${status}Apps`, userid: adminid});
 }
 
 export function fetchAppEntity(userid, appid) {
   const types = [actionTypes.FETCH_ENTITY_REQUEST, actionTypes.FETCH_ENTITY_SUCCESS, actionTypes.FETCH_ENTITY_FAILURE];
-  return buildApiAction({types, entityOrCollection: 'entity', name: 'apps', userid, id: appid});
+  return buildApiAction({types, name: 'apps', userid, id: appid});
 }
 
 export function fetchAppExtendedEntity(userid, appid) {
   const types = [actionTypes.FETCH_ENTITY_REQUEST, actionTypes.FETCH_ENTITY_SUCCESS, actionTypes.FETCH_ENTITY_FAILURE];
-  return buildApiAction({types, entityOrCollection: 'entity', name: 'appsExtended', userid, id: appid});
+  return buildApiAction({types, name: 'appsExtended', userid, id: appid});
 }
 
 export function fetchThumbEntity(userid, thumbid) {
   const types = [actionTypes.FETCH_ENTITY_REQUEST, actionTypes.FETCH_ENTITY_SUCCESS, actionTypes.FETCH_ENTITY_FAILURE];
-  return buildApiAction({types, entityOrCollection: 'entity', name: 'thumbs', userid, id: thumbid});
+  return buildApiAction({types, name: 'thumbs', userid, id: thumbid});
 }
 
-export function putNewThumbEntity(userid, thumbid) {
-  const types = [actionTypes.FETCH_ENTITY_REQUEST, actionTypes.FETCH_ENTITY_SUCCESS, actionTypes.FETCH_ENTITY_FAILURE];
-  return buildApiAction({types, entityOrCollection: 'entity', name: 'thumbs', userid, id: thumbid});
+export function putNewAppEntity(userid, appData) {
+  const types = [actionTypes.PUT_ENTITY_REQUEST, actionTypes.PUT_ENTITY_SUCCESS, actionTypes.PUT_ENTITY_FAILURE];
+  return buildApiAction({
+    types, name: 'apps', userid,
+    data: appData,
+    onSuccess: (id) => {
+      const types1 = [actionTypes.PUT_COLLECTION_REQUEST, actionTypes.PUT_COLLECTION_SUCCESS, actionTypes.PUT_COLLECTION_FAILURE];
+      return buildApiAction({types: types1, name: 'pendingApps', userid: adminid, data: {userid, submitted: Date.now()}, id});
+    }
+  });
 }
 
 function buildApiAction(options) {
