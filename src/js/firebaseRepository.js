@@ -27,7 +27,7 @@ export function signupWithEmail(email, password) {
       return data;
     });
 }
-export function getOnce(endpoint) {
+export function get(endpoint) {
   return fp
     .child(endpoint)
     .once('value')
@@ -37,13 +37,6 @@ export function set(endpoint, data) {
   return fp
     .child(endpoint)
     .set(data);
-}
-// Firebase's PUSH will enable us to return the unique id.
-export function push(endpoint, data) {
-  return fp
-    .child(endpoint)
-    .push(data)
-    .then(data => data.key());
 }
 export function remove(endpoint) {
   return fp

@@ -6,8 +6,9 @@ import {createStore, applyMiddleware} from 'redux';
 import {expect} from 'chai';
 
 import apiMiddleware from '../src/js/middleware/api';
-import {fetchAppCollection, fetchAppEntity} from '../src/js/actions';
+import {fetchAppCollection, fetchAppEntity, putNewAppEntity} from '../src/js/actions';
 import reducer from '../src/js/reducers';
+import * as uuid from '../src/js/utils/uuid';
 import * as coreReducers from '../src/js/reducers/core';
 
 describe('api middleware', () => {
@@ -25,7 +26,7 @@ describe('api middleware', () => {
 
     const returnValue = {testKey: 'testValue'};
     sinon
-      .stub(Firebase, 'getOnce')
+      .stub(Firebase, 'get')
       .resolves(returnValue);
 
     const setCollectionRequest = sinon
@@ -47,7 +48,7 @@ describe('api middleware', () => {
           data: null
         })).calledOnce).to.be.true;
         expect(setCollectionSuccess.calledOnce).to.be.true;
-        restore(Firebase.getOnce);
+        restore(Firebase.get, setCollectionRequest, setCollectionSuccess);
         done();
       },
       (error) => {
@@ -62,7 +63,7 @@ describe('api middleware', () => {
 
     const returnValue = {testKey: 'testValue'};
     sinon
-      .stub(Firebase, 'getOnce')
+      .stub(Firebase, 'get')
       .resolves(returnValue);
 
     const setEntityRequest = sinon
@@ -88,13 +89,87 @@ describe('api middleware', () => {
           data: null
         })).calledOnce).to.be.true;
         expect(setEntitySuccess.calledOnce).to.be.true;
-        restore(Firebase.getOnce);
+        restore(Firebase.get, setEntityRequest, setEntitySuccess);
         done();
       },
       (error) => {
         done(error);
       }
-    );
+    ).catch(done);
+
+  });
+
+  it('tests putting a new app entity, then the collection item', (done) => {
+    const store = initializeStore(fromJS({entities: {}, collections: {}}));
+
+    sinon
+      .stub(uuid, 'generateUUID')
+      .returns('myuid');
+
+    sinon.stub(Date, 'now').returns(7654321)
+
+    sinon
+      .stub(Firebase, 'set')
+      .resolves();
+
+    const setEntityRequest = sinon
+      .spy(coreReducers, 'setEntityRequest');
+    const setEntitySuccess = sinon
+      .spy(coreReducers, 'setEntitySuccess');
+    const setCollectionRequest = sinon
+      .spy(coreReducers, 'setCollectionRequest');
+    const setCollectionSuccess = sinon
+      .spy(coreReducers, 'setCollectionSuccess');
+
+    var data = {
+      humanName: 'SAFE Talk',
+      caption: 'The place to talk about everything SAFE', // max: 100 chars
+      categories: [1, 2],
+      thumbid: '123'
+    };
+    const result = store.dispatch(putNewAppEntity('userid', data));
+
+    result.then(() => {
+        let shouldBe = fromJS({
+          apps: {
+            myuid: {
+              isLoading: false,
+              data: data
+            }
+          }
+        });
+        expect(store.getState().get('entities')).to.equal(shouldBe);
+        expect(setEntityRequest.withArgs(Map({
+          isLoading: false,
+          data: null
+        })).calledOnce).to.be.true;
+        expect(setEntitySuccess.calledOnce).to.be.true;
+
+        shouldBe = fromJS({
+          pendingApps: {
+            isLoading: false,
+            data: {
+              'myuid': {
+                userid: 'userid',
+                submitted: 7654321
+              }
+            }
+          }
+        });
+        expect(store.getState().get('collections')).to.equal(shouldBe);
+        expect(setCollectionRequest.withArgs(Map({
+          isLoading: false,
+          data: null
+        })).calledOnce).to.be.true;
+        expect(setCollectionSuccess.calledOnce).to.be.true;
+
+        restore(Firebase.set, setCollectionRequest, setCollectionSuccess, setEntityRequest, setEntitySuccess);
+        done();
+      },
+      (error) => {
+        done(error);
+      }
+    ).catch(done);
 
   });
 

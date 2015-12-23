@@ -39,10 +39,8 @@ export default store => next => action => {
   if (!types.every(type => typeof type === 'string')) {
     throw new Error('Expected action types to be strings.');
   }
-
-  // If an ID was not provided, we need to generate one
   if (request === 'PUT' && !id) {
-    id = uuid();
+    throw new Error('Every put must have an ID.');
   }
 
   endpoint = endpoint ? endpoint : generateApiEndpoint(userid, name, id);
@@ -61,12 +59,18 @@ export default store => next => action => {
   const [typeRequest, typeSuccess, typeFailure] = types;
   next(actionWith({ type: typeRequest }));
 
-  let successClosure = data => {
+  let successClosure = result => {
     if (onSuccess) {
-      store.dispatch(onSuccess(id));
+      store.dispatch(onSuccess());
     }
 
-    return next(actionWith({type: typeSuccess, data}));
+    if (request === 'FETCH') {
+      var returnData = result;
+    } else if (request === 'PUT') {
+      var returnData = data;
+    }
+
+    return next(actionWith({type: typeSuccess, data: returnData}));
   };
   let errorClosure = error => {
     if (onFailure) {
@@ -79,7 +83,7 @@ export default store => next => action => {
 
   switch (request) {
     case 'FETCH':
-      return Firebase.getOnce(endpoint).then(successClosure, errorClosure);
+      return Firebase.get(endpoint).then(successClosure, errorClosure);
     case 'PUT':
       return Firebase.set(endpoint, data).then(successClosure, errorClosure);
     case 'DELETE':

@@ -1,4 +1,4 @@
-import {Map} from 'immutable';
+import {Map, fromJS} from 'immutable';
 
 import DefaultState from './defaultState';
 import * as reducers from './core';
@@ -44,7 +44,10 @@ function signup(signupState, action) {
 function collections(collectionState, action) {
   if (
     !action[API] ||
-    ['FETCH_COLLECTION_REQUEST', 'FETCH_COLLECTION_SUCCESS', 'FETCH_COLLECTION_FAILURE'].indexOf(action.type) < 0
+    [
+      'FETCH_COLLECTION_REQUEST', 'FETCH_COLLECTION_SUCCESS', 'FETCH_COLLECTION_FAILURE',
+      'PUT_COLLECTION_REQUEST', 'PUT_COLLECTION_SUCCESS', 'PUT_COLLECTION_FAILURE',
+    ].indexOf(action.type) < 0
   ) {
     return collectionState;
   }
@@ -57,7 +60,24 @@ function collections(collectionState, action) {
   if (action.type.indexOf('REQUEST') > -1) {
     return collectionState.update(action[API].name, defaultCollection, collection => reducers.setCollectionRequest(collection));
   } else if (action.type.indexOf('SUCCESS') > -1) {
-    return collectionState.update(action[API].name, defaultCollection, collection => reducers.setCollectionSuccess(collection, action.data));
+    let request = action.type.substr(0, action.type.indexOf('_')),
+      data;
+
+    if (request === 'PUT') {
+      // If a new app was PUT, it needs to be added to the existing collection of apps. If no collection exists
+      // yet for whatever reason, create a new empty list.
+      data = collectionState.getIn([action[API].name, 'data']);
+
+      if (!data) {
+        data = Map();
+      }
+      data = data.set(action[API].id, fromJS(action[API].data));
+    } else if (request === 'FETCH') {
+      // If we fetched a collection, then the data returned is the entire collection
+      data = action.data;
+    }
+
+    return collectionState.update(action[API].name, defaultCollection, collection => reducers.setCollectionSuccess(collection, data));
   } else if (action.type.indexOf('FAILURE') > -1) {
     return collectionState.update(action[API].name, defaultCollection, collection => reducers.setCollectionFailure(collection, action.error));
   } else {
@@ -67,8 +87,10 @@ function collections(collectionState, action) {
 
 function entities(entityState, action) {
   if (
-    !action[API] ||
-    ['FETCH_ENTITY_REQUEST', 'FETCH_ENTITY_SUCCESS', 'FETCH_ENTITY_FAILURE'].indexOf(action.type) < 0
+    !action[API] || [
+      'FETCH_ENTITY_REQUEST', 'FETCH_ENTITY_SUCCESS', 'FETCH_ENTITY_FAILURE',
+      'PUT_ENTITY_REQUEST', 'PUT_ENTITY_SUCCESS', 'PUT_ENTITY_FAILURE',
+    ].indexOf(action.type) < 0
   ) {
     return entityState;
   }

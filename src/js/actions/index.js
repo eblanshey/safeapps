@@ -1,6 +1,7 @@
 import * as actionTypes from './actionTypes';
 import {CALL_API} from '../middleware/api';
 import config from '../config';
+import {generateUUID} from '../utils/uuid';
 
 const adminid = config.adminId;
 
@@ -76,11 +77,13 @@ export function fetchThumbEntity(userid, thumbid) {
 }
 
 export function putNewAppEntity(userid, appData) {
-  const types = [actionTypes.PUT_ENTITY_REQUEST, actionTypes.PUT_ENTITY_SUCCESS, actionTypes.PUT_ENTITY_FAILURE];
+  const types = [actionTypes.PUT_ENTITY_REQUEST, actionTypes.PUT_ENTITY_SUCCESS, actionTypes.PUT_ENTITY_FAILURE],
+    id = generateUUID();
+
   return buildApiAction({
     types, name: 'apps', userid,
-    data: appData,
-    onSuccess: (id) => {
+    data: appData, id: id,
+    onSuccess: () => {
       const types1 = [actionTypes.PUT_COLLECTION_REQUEST, actionTypes.PUT_COLLECTION_SUCCESS, actionTypes.PUT_COLLECTION_FAILURE];
       return buildApiAction({types: types1, name: 'pendingApps', userid: adminid, data: {userid, submitted: Date.now()}, id});
     }
