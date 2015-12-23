@@ -33,7 +33,7 @@ export function setAuthData(authState, newAuthData) {
   const newState = authState
     .set('isLoggedIn', newAuthData ? true : false)
     .set('isLoggingIn', false)
-    .set('authData', newAuthData ? Map(newAuthData) : null);
+    .set('authData', newAuthData ? fromJS(newAuthData) : null);
 
   // If logged out, then definitely user should not be set as admin
   if(!newAuthData) {

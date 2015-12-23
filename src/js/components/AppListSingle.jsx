@@ -30,17 +30,21 @@ export default React.createClass({
     if (!app || app.size === 0 || app.get('isLoading') === true) {
       content = <h3>Loading app #{id}</h3>;
     } else {
-      const appData = app.get('data');
+      const appData = app.get('data'),
+        thumbContent = appData.get('thumbid') ? (<Thumb
+          userid={userid}
+          thumbid={appData.get('thumbid')}
+          thumb={thumb}
+          size={50}
+          loadThumbEntity={this.props.loadThumbEntity}
+          />) : null;
+
+      console.log('the humb data', app.get('thumbid'));
 
       content = (
         <div>
-          <Thumb
-            userid={userid}
-            thumbid={appData.get('thumbid')}
-            thumb={thumb}
-            size={50}
-            loadThumbEntity={this.props.loadThumbEntity}
-            />
+          {thumbContent}
+
           <h2><Link to={`/app/${userid}/${id}`}>{appData.get('humanName')}</Link></h2>
 
           <h3>{appData.get('caption')}</h3>

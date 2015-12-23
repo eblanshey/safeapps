@@ -2,37 +2,42 @@ import React from 'react';
 import Pure from 'react-addons-pure-render-mixin';
 import {connect} from 'react-redux';
 import {Map} from 'immutable';
+import {Link} from 'react-router';
 
 import AppList from '../components/AppList';
 import {loadAppCollection} from '../actions/thunks';
 import {loadAppEntity, loadThumbEntity} from '../actions/thunks';
 import {fetchAppCollection} from '../actions';
 
+const allowedStatuses = [
+  'approved', 'denied', 'pending'
+];
+
 export const AppListEntry = React.createClass({
   mixins: [Pure],
 
-  allowedStatuses: [
-    'approved', 'denied', 'pending'
-  ],
-
   render: function() {
-    let status = this.props.params.status;
-
-    if (!status || this.allowedStatuses.indexOf(status) < 0) {
-      status = 'approved';
-    }
-
     return (
-      <AppList status={status} {...this.props} />
+      <div>
+        <p><Link to="/submit">Submit New App</Link></p>
+        <AppList {...this.props} />
+      </div>
     );
   }
 });
 
-function mapStateToProps(state) {
+function mapStateToProps(state, ownProps) {
+  let status = ownProps.params.status;
+
+  if (!status || allowedStatuses.indexOf(status) < 0) {
+    status = 'approved';
+  }
+
   return {
-    appCollection: state.getIn(['collections', 'approvedApps']),
+    appCollection: state.getIn(['collections', `${status}Apps`]),
     apps: state.getIn(['entities', 'apps']),
-    thumbs: state.getIn(['entities', 'thumbs'])
+    thumbs: state.getIn(['entities', 'thumbs']),
+    status: status
   };
 }
 

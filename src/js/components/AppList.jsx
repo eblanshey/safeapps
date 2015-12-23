@@ -12,7 +12,8 @@ export default React.createClass({
     apps: React.PropTypes.object,
     loadAppCollection: React.PropTypes.func.isRequired,
     fetchAppCollection: React.PropTypes.func.isRequired,
-    loadAppEntity: React.PropTypes.func.isRequired
+    loadAppEntity: React.PropTypes.func.isRequired,
+    status: React.PropTypes.string.isRequired
   },
 
   componentWillMount() {
@@ -66,9 +67,9 @@ export default React.createClass({
 });
 
 function loadApps(props) {
-   return props.loadAppCollection('approved');
+   return props.loadAppCollection(props.status);
 }
 
 function fetchApps() {
-  return this.props.fetchAppCollection('approved');
+  return this.props.fetchAppCollection(props.status);
 }

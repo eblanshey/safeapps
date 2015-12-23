@@ -12,6 +12,7 @@ import App from './views/App';
 import {AppListEntryContainer} from './views/AppListEntry';
 import {AppEntryContainer} from './views/AppEntry';
 import {LoginContainer} from './views/Login';
+import {SubmitContainer} from './views/Submit';
 import {setupLoginListener} from './firebaseRepository';
 import {loginSuccessful} from 'actions';
 
@@ -31,6 +32,7 @@ setupLoginListener(authData => {
 const routes = (
   <Route path="/" component={App}>
     <Route path="login" component={LoginContainer} />
+    <Route path="submit" component={SubmitContainer} />
     <Route path=":status" component={AppListEntryContainer} />
     <Route path="app/:userid/:appid" component={AppEntryContainer} />
     <IndexRoute component={AppListEntryContainer} />

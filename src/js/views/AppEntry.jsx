@@ -36,15 +36,18 @@ export const AppEntry = React.createClass({
     if (!app || app.get('isLoading')) {
       appContent = (<div>Loading...</div>);
     } else if (app.get('data')) {
+      let thumbContent = app.getIn(['data', 'thumbid']) ? (<Thumb
+        userid={userid}
+        thumbid={app.getIn(['data', 'thumbid'])}
+        thumb={thumb}
+        size={50}
+        loadThumbEntity={this.props.loadThumbEntity}
+        />) : null;
+
       appContent = (
         <div>
-          <Thumb
-            userid={userid}
-            thumbid={app.getIn(['data', 'thumbid'])}
-            thumb={thumb}
-            size={50}
-            loadThumbEntity={this.props.loadThumbEntity}
-            />
+          {thumbContent}
+
           <h2>{app.get('data').get('humanName')}</h2>
 
           <h3>{app.get('data').get('caption')}</h3>
